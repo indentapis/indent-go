@@ -22,6 +22,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+// Kind of Target the Event is being written to.
 type Target_Kind int32
 
 const (
@@ -279,7 +280,7 @@ func (m *Resource) GetKind() string {
 	return ""
 }
 
-// Target is the indended recipient of the contained Events.
+// Target is the intended recipient of the contained Events.
 type Target struct {
 	Name                 string      `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Kind                 Target_Kind `protobuf:"varint,2,opt,name=kind,proto3,enum=indent.audit.v1.Target_Kind" json:"kind,omitempty"`
