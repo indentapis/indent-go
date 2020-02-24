@@ -9,8 +9,6 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"go.uber.org/zap"
-
-	auditpb "go.indent.com/indent-go/api/indent/audit/v1"
 )
 
 func init() {
@@ -28,7 +26,7 @@ func testClient(t *testing.T) *Client {
 	}
 
 	// setup Input target
-	target := &auditpb.Target{
+	target := &Target{
 		Name: testTarget,
 	}
 
@@ -39,17 +37,17 @@ func testClient(t *testing.T) *Client {
 	return client
 }
 
-func testEvents(num int) []*auditpb.Event {
-	events := make([]*auditpb.Event, num)
+func testEvents(num int) []*Event {
+	events := make([]*Event, num)
 	now := time.Now().UTC()
 	for i := 0; i < num; i++ {
-		events[i] = &auditpb.Event{
+		events[i] = &Event{
 			Event:      randStr(4, 8),
 			Timestamp:  randTimestamp(now, 14*24*time.Hour),
 			Id:         randStr(8, 22),
 			ExternalId: randStr(8, 22),
 			SessionId:  randStr(8, 22),
-			Actor: &auditpb.Actor{
+			Actor: &Actor{
 				Id:          randStr(4, 8),
 				DisplayName: randStr(4, 16),
 				Email:       fmt.Sprintf("%s@%s.com", randStr(3, 6), randStr(4, 9)),

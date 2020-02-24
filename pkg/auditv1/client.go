@@ -6,8 +6,6 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
-
-	auditpb "go.indent.com/indent-go/api/indent/audit/v1"
 )
 
 const (
@@ -15,7 +13,7 @@ const (
 )
 
 // NewClient returns a client that sends to input.
-func NewClient(logger *zap.Logger, target *auditpb.Target) (*Client, error) {
+func NewClient(logger *zap.Logger, target *Target) (*Client, error) {
 	l := logger.Sugar()
 	pool, err := x509.SystemCertPool()
 	if err != nil {
@@ -30,7 +28,7 @@ func NewClient(logger *zap.Logger, target *auditpb.Target) (*Client, error) {
 
 	return &Client{
 		Target: target,
-		Audit:  auditpb.NewAuditAPIClient(con),
+		Audit:  NewAuditAPIClient(con),
 		Log:    l,
 	}, nil
 }
@@ -38,10 +36,10 @@ func NewClient(logger *zap.Logger, target *auditpb.Target) (*Client, error) {
 // Client sends events to the Audit API.
 type Client struct {
 	// Target to send Events to.
-	Target *auditpb.Target
+	Target *Target
 
 	// Audit communicates with the AuditAPI.
-	Audit auditpb.AuditAPIClient
+	Audit AuditAPIClient
 
 	// Log prints informational messages.
 	Log *zap.SugaredLogger
