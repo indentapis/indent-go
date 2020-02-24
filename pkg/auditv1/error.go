@@ -3,8 +3,6 @@ package auditv1
 import (
 	"encoding/json"
 	"fmt"
-
-	auditpb "go.indent.com/indent-go/api/indent/audit/v1"
 )
 
 // Error encountered when writing an Event. Contains original Event for posterity.
@@ -13,7 +11,7 @@ type Error struct {
 	Message string
 
 	// Events that failed to be written.
-	Events []*auditpb.Event
+	Events []*Event
 }
 
 // Error returns the reason for the failure as well as the original Event.

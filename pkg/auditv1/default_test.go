@@ -19,7 +19,7 @@ func TestDefaultWriteEvents(t *testing.T) {
 	events := testEvents(50)
 
 	ctx := context.Background()
-	if err := WriteEvents(ctx, true, events); err != nil {
+	if err := WriteEvents(ctx, events); err != nil {
 		t.Error(err)
 	}
 }

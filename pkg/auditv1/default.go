@@ -6,8 +6,6 @@ import (
 	"fmt"
 
 	"go.uber.org/zap"
-
-	auditpb "go.indent.com/indent-go/api/indent/audit/v1"
 )
 
 var (
@@ -33,7 +31,7 @@ func Init(dsn string) {
 }
 
 // SetupClient configures the DefaultClient for t.
-func SetupClient(l *zap.Logger, t *auditpb.Target) (err error) {
+func SetupClient(l *zap.Logger, t *Target) (err error) {
 	if DefaultClient == nil {
 		if DefaultClient, err = NewClient(l, t); err != nil {
 			return
@@ -45,7 +43,7 @@ func SetupClient(l *zap.Logger, t *auditpb.Target) (err error) {
 }
 
 // Write event asynchronously to DefaultClient. Errors are logged including event.
-func Write(event *auditpb.Event) {
+func Write(event *Event) {
 	if DefaultClient != nil {
 		DefaultClient.Write(event)
 	} else {
@@ -54,9 +52,9 @@ func Write(event *auditpb.Event) {
 }
 
 // WriteEvents to DefaultClient. Failures contained in err will contain event.
-func WriteEvents(ctx context.Context, async bool, events []*auditpb.Event) (err error) {
+func WriteEvents(ctx context.Context, events []*Event) (err error) {
 	if DefaultClient != nil {
-		if err := DefaultClient.WriteEvents(ctx, async, events); err != nil {
+		if err := DefaultClient.WriteEvents(ctx, events); err != nil {
 			return err
 		}
 	} else {
