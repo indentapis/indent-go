@@ -362,7 +362,9 @@ func init() {
 	proto.RegisterType((*Target)(nil), "indent.audit.v1.Target")
 }
 
-func init() { proto.RegisterFile("indent/audit/v1/resources.proto", fileDescriptor_3bf215d7d77adf9c) }
+func init() {
+	proto.RegisterFile("indent/audit/v1/resources.proto", fileDescriptor_3bf215d7d77adf9c)
+}
 
 var fileDescriptor_3bf215d7d77adf9c = []byte{
 	// 551 bytes of a gzipped FileDescriptorProto
