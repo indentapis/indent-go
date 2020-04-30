@@ -10,6 +10,8 @@ import (
 	empty "github.com/golang/protobuf/ptypes/empty"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -231,7 +233,9 @@ func init() {
 	proto.RegisterType((*WriteBatchRequest)(nil), "indent.audit.v1.WriteBatchRequest")
 }
 
-func init() { proto.RegisterFile("indent/audit/v1/audit_api.proto", fileDescriptor_ff0992820003f443) }
+func init() {
+	proto.RegisterFile("indent/audit/v1/audit_api.proto", fileDescriptor_ff0992820003f443)
+}
 
 var fileDescriptor_ff0992820003f443 = []byte{
 	// 501 bytes of a gzipped FileDescriptorProto
@@ -271,11 +275,11 @@ var fileDescriptor_ff0992820003f443 = []byte{
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ grpc.ClientConn
+var _ grpc.ClientConnInterface
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
+const _ = grpc.SupportPackageIsVersion6
 
 // AuditAPIClient is the client API for AuditAPI service.
 //
@@ -294,10 +298,10 @@ type AuditAPIClient interface {
 }
 
 type auditAPIClient struct {
-	cc *grpc.ClientConn
+	cc grpc.ClientConnInterface
 }
 
-func NewAuditAPIClient(cc *grpc.ClientConn) AuditAPIClient {
+func NewAuditAPIClient(cc grpc.ClientConnInterface) AuditAPIClient {
 	return &auditAPIClient{cc}
 }
 
@@ -340,6 +344,20 @@ type AuditAPIServer interface {
 	//
 	// Deprecated: Use Write.
 	WriteBatch(context.Context, *WriteBatchRequest) (*empty.Empty, error)
+}
+
+// UnimplementedAuditAPIServer can be embedded to have forward compatible implementations.
+type UnimplementedAuditAPIServer struct {
+}
+
+func (*UnimplementedAuditAPIServer) Write(ctx context.Context, req *WriteRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Write not implemented")
+}
+func (*UnimplementedAuditAPIServer) WriteEvent(ctx context.Context, req *WriteEventRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WriteEvent not implemented")
+}
+func (*UnimplementedAuditAPIServer) WriteBatch(ctx context.Context, req *WriteBatchRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WriteBatch not implemented")
 }
 
 func RegisterAuditAPIServer(s *grpc.Server, srv AuditAPIServer) {
