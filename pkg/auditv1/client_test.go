@@ -17,6 +17,7 @@ func init() {
 
 const (
 	testTarget = "4b5be66077a24e57b19eb20012fa1eb2"
+	testDSN    = "https://audit.indentapis.com/v1/4b5be66077a24e57b19eb20012fa1eb2"
 )
 
 func testClient(t *testing.T) *Client {
@@ -31,6 +32,19 @@ func testClient(t *testing.T) *Client {
 	}
 
 	client, err := NewClient(logger, target)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return client
+}
+
+func testClientFromDSN(t *testing.T) *Client {
+	logger, err := zap.NewDevelopment()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	client, err := NewClientFromDSN(logger, testDSN)
 	if err != nil {
 		t.Fatal(err)
 	}
