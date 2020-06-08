@@ -18,6 +18,24 @@ func TargetFromDSN(dsn string) (*Target, error) {
 	}
 }
 
+func EndpointFromDSN(dsn string) (string, error) {
+	if u, err := url.Parse(dsn); err != nil {
+		return "", fmt.Errorf("failed to parse dsn: %v", err)
+	} else {
+		port := "443"
+		if u.Scheme == "http" {
+			port = "80"
+		} else if u.Port() != "" {
+			port = u.Port()
+		}
+		host := u.Hostname()
+		if host == "" {
+			host = defaultAuditHost
+		}
+		return host + ":" + port, nil
+	}
+}
+
 func targetName(u *url.URL) string {
 	return strings.TrimPrefix(u.Path, "/v1/")
 }
