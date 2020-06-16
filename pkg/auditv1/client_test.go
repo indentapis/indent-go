@@ -61,7 +61,7 @@ func testEvents(num int) []*Event {
 			Id:         randStr(8, 22),
 			ExternalId: randStr(8, 22),
 			SessionId:  randStr(8, 22),
-			Actor: &Actor{
+			Actor: &Resource{
 				Id:          randStr(4, 8),
 				DisplayName: randStr(4, 16),
 				Email:       fmt.Sprintf("%s@%s.com", randStr(3, 6), randStr(4, 9)),
