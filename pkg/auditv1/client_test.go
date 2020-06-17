@@ -17,7 +17,7 @@ func init() {
 
 const (
 	testTarget = "4b5be66077a24e57b19eb20012fa1eb2"
-	testDSN    = "https://audit.indentapis.com/v1/4b5be66077a24e57b19eb20012fa1eb2"
+	testDSN    = "https://write.indentapis.com/v1/4b5be66077a24e57b19eb20012fa1eb2"
 )
 
 func testClient(t *testing.T) *Client {
