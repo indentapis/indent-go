@@ -13,11 +13,11 @@ func TestTargetFromDSN(t *testing.T) {
 		fail   bool
 	}{
 		{
-			dsn:    "https://audit.indentapis.com/v1/12951631f22a14ecd927d0002b91df93",
+			dsn:    "https://write.indentapis.com/v1/12951631f22a14ecd927d0002b91df93",
 			target: &Target{Name: "12951631f22a14ecd927d0002b91df93"},
 		},
 		{
-			dsn:    "https://test-user:test-password@audit.indentapis.com/v1/12951631f22a14ecd927d0002b91df93",
+			dsn:    "https://test-user:test-password@write.indentapis.com/v1/12951631f22a14ecd927d0002b91df93",
 			target: &Target{Name: "12951631f22a14ecd927d0002b91df93"},
 		},
 		{
@@ -46,8 +46,8 @@ func TestEndpointFromDSN(t *testing.T) {
 		fail     bool
 	}{
 		{
-			dsn:      "https://audit.indentapis.com/v1/12951631f22a14ecd927d0002b91df93",
-			endpoint: "audit.indentapis.com:443",
+			dsn:      "https://write.indentapis.com/v1/12951631f22a14ecd927d0002b91df93",
+			endpoint: "write.indentapis.com:443",
 		},
 		{
 			dsn:      "https://test-user:test-password@write.indentapis.com/v1/12951631f22a14ecd927d0002b91df93",
@@ -55,7 +55,7 @@ func TestEndpointFromDSN(t *testing.T) {
 		},
 		{
 			dsn:      "/v1/12951631f22a14ecd927d0002b91df93",
-			endpoint: "audit.indentapis.com:443",
+			endpoint: "write.indentapis.com:443",
 		},
 	}
 

@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	auditEndpoint    = "audit.indentapis.com:443"
-	defaultAuditHost = "audit.indentapis.com"
+	auditEndpoint    = "write.indentapis.com:443"
+	defaultAuditHost = "write.indentapis.com"
 )
 
 // NewClientFromDSN returns a client that sends to input by DSN.
