@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 )
 
@@ -11,6 +12,10 @@ import (
 func (c *Client) Write(event *Event) {
 	ts := ptypes.TimestampNow()
 	go func() {
+		// deep-copy event
+		event = proto.Clone(event).(*Event)
+
+		// set timestamp to current time
 		event.Timestamp = ts
 
 		ctx := context.Background()
