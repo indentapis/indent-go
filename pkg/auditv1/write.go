@@ -6,6 +6,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
+	"go.uber.org/zap"
 )
 
 // Write event asynchronously to Audit API. Errors are logged including event.
@@ -20,7 +21,7 @@ func (c *Client) Write(event *Event) {
 
 		ctx := context.Background()
 		if err := c.WriteEvents(ctx, []*Event{event}); err != nil {
-			c.Log.Errorf("failed writing event: %v", err)
+			c.Log.Error("Failed writing event", zap.Error(err))
 		} else {
 			c.Log.Debug("successfully wrote event")
 		}

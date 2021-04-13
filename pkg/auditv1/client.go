@@ -15,10 +15,9 @@ const (
 
 // NewClientFromDSN returns a client that sends to input by DSN.
 func NewClientFromDSN(logger *zap.Logger, dsn string) (*Client, error) {
-	l := logger.Sugar()
 	pool, err := x509.SystemCertPool()
 	if err != nil {
-		l.Fatal(err)
+		logger.Fatal(err.Error(), zap.Error(err))
 	}
 	tlsCreds := credentials.NewClientTLSFromCert(pool, "")
 
@@ -39,16 +38,15 @@ func NewClientFromDSN(logger *zap.Logger, dsn string) (*Client, error) {
 	return &Client{
 		Target: target,
 		Audit:  NewAuditAPIClient(con),
-		Log:    l,
+		Log:    logger,
 	}, nil
 }
 
 // NewClient returns a client that sends to input.
 func NewClient(logger *zap.Logger, target *Target) (*Client, error) {
-	l := logger.Sugar()
 	pool, err := x509.SystemCertPool()
 	if err != nil {
-		l.Fatal(err)
+		logger.Error(err.Error(), zap.Error(err))
 	}
 	tlsCreds := credentials.NewClientTLSFromCert(pool, "")
 
@@ -60,7 +58,7 @@ func NewClient(logger *zap.Logger, target *Target) (*Client, error) {
 	return &Client{
 		Target: target,
 		Audit:  NewAuditAPIClient(con),
-		Log:    l,
+		Log:    logger,
 	}, nil
 }
 
@@ -73,5 +71,5 @@ type Client struct {
 	Audit AuditAPIClient
 
 	// Log prints informational messages.
-	Log *zap.SugaredLogger
+	Log *zap.Logger
 }
