@@ -7,11 +7,11 @@ import (
 	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	empty "github.com/golang/protobuf/ptypes/empty"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	math "math"
 )
 
@@ -286,15 +286,15 @@ const _ = grpc.SupportPackageIsVersion6
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type AuditAPIClient interface {
 	// Write a new Event to a Target.
-	Write(ctx context.Context, in *WriteRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	Write(ctx context.Context, in *WriteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// WriteEvent a new Event into Indent.
 	//
 	// Deprecated: Use Write.
-	WriteEvent(ctx context.Context, in *WriteEventRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	WriteEvent(ctx context.Context, in *WriteEventRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// WriteBatch writes multiple Events into Indent.
 	//
 	// Deprecated: Use Write.
-	WriteBatch(ctx context.Context, in *WriteBatchRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	WriteBatch(ctx context.Context, in *WriteBatchRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type auditAPIClient struct {
@@ -305,8 +305,8 @@ func NewAuditAPIClient(cc grpc.ClientConnInterface) AuditAPIClient {
 	return &auditAPIClient{cc}
 }
 
-func (c *auditAPIClient) Write(ctx context.Context, in *WriteRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *auditAPIClient) Write(ctx context.Context, in *WriteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/indent.audit.v1.AuditAPI/Write", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -314,8 +314,8 @@ func (c *auditAPIClient) Write(ctx context.Context, in *WriteRequest, opts ...gr
 	return out, nil
 }
 
-func (c *auditAPIClient) WriteEvent(ctx context.Context, in *WriteEventRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *auditAPIClient) WriteEvent(ctx context.Context, in *WriteEventRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/indent.audit.v1.AuditAPI/WriteEvent", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -323,8 +323,8 @@ func (c *auditAPIClient) WriteEvent(ctx context.Context, in *WriteEventRequest, 
 	return out, nil
 }
 
-func (c *auditAPIClient) WriteBatch(ctx context.Context, in *WriteBatchRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *auditAPIClient) WriteBatch(ctx context.Context, in *WriteBatchRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/indent.audit.v1.AuditAPI/WriteBatch", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -335,28 +335,28 @@ func (c *auditAPIClient) WriteBatch(ctx context.Context, in *WriteBatchRequest, 
 // AuditAPIServer is the server API for AuditAPI service.
 type AuditAPIServer interface {
 	// Write a new Event to a Target.
-	Write(context.Context, *WriteRequest) (*empty.Empty, error)
+	Write(context.Context, *WriteRequest) (*emptypb.Empty, error)
 	// WriteEvent a new Event into Indent.
 	//
 	// Deprecated: Use Write.
-	WriteEvent(context.Context, *WriteEventRequest) (*empty.Empty, error)
+	WriteEvent(context.Context, *WriteEventRequest) (*emptypb.Empty, error)
 	// WriteBatch writes multiple Events into Indent.
 	//
 	// Deprecated: Use Write.
-	WriteBatch(context.Context, *WriteBatchRequest) (*empty.Empty, error)
+	WriteBatch(context.Context, *WriteBatchRequest) (*emptypb.Empty, error)
 }
 
 // UnimplementedAuditAPIServer can be embedded to have forward compatible implementations.
 type UnimplementedAuditAPIServer struct {
 }
 
-func (*UnimplementedAuditAPIServer) Write(ctx context.Context, req *WriteRequest) (*empty.Empty, error) {
+func (*UnimplementedAuditAPIServer) Write(ctx context.Context, req *WriteRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Write not implemented")
 }
-func (*UnimplementedAuditAPIServer) WriteEvent(ctx context.Context, req *WriteEventRequest) (*empty.Empty, error) {
+func (*UnimplementedAuditAPIServer) WriteEvent(ctx context.Context, req *WriteEventRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WriteEvent not implemented")
 }
-func (*UnimplementedAuditAPIServer) WriteBatch(ctx context.Context, req *WriteBatchRequest) (*empty.Empty, error) {
+func (*UnimplementedAuditAPIServer) WriteBatch(ctx context.Context, req *WriteBatchRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WriteBatch not implemented")
 }
 
