@@ -11,16 +11,14 @@ import (
 	"go.uber.org/zap"
 )
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
 const (
 	testTarget = "4b5be66077a24e57b19eb20012fa1eb2"
 	testDSN    = "https://write.indentapis.com/v1/4b5be66077a24e57b19eb20012fa1eb2"
 )
 
 func testClient(t *testing.T) *Client {
+	t.Helper()
+
 	logger, err := zap.NewDevelopment()
 	if err != nil {
 		t.Fatal(err)
@@ -39,6 +37,8 @@ func testClient(t *testing.T) *Client {
 }
 
 func testClientFromDSN(t *testing.T) *Client {
+	t.Helper()
+
 	logger, err := zap.NewDevelopment()
 	if err != nil {
 		t.Fatal(err)
@@ -71,6 +71,7 @@ func testEvents(num int) []*Event {
 	return events
 }
 
+//nolint:gosec
 func randStr(min, max int) (str string) {
 	length := max
 	if min != max {
@@ -85,6 +86,7 @@ func randStr(min, max int) (str string) {
 	return
 }
 
+//nolint:gosec
 func randTimestamp(center time.Time, variance time.Duration) *timestamp.Timestamp {
 	varInt := int64(variance)
 	diff := time.Duration(rand.Int63n(varInt) - (varInt / 2))

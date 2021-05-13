@@ -14,7 +14,7 @@ func (c *Client) Write(event *Event) {
 	ts := ptypes.TimestampNow()
 	go func() {
 		// deep-copy event
-		event = proto.Clone(event).(*Event)
+		event, _ = proto.Clone(event).(*Event)
 
 		// set timestamp to current time
 		event.Timestamp = ts
