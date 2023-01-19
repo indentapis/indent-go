@@ -1,0 +1,210 @@
+// Example protos for testing generated marshalers.
+syntax = "proto3";
+
+package indent.log;
+
+option go_package = "indent/log;log";
+
+import "indent/log/log.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+message SimpleMessage {
+  string string_value = 1 [(indent.log.Include) = true];
+  bool bool_value = 2 [(indent.log.Include) = true];
+}
+
+message NotLoggingSimpleMessage {
+  string string_value = 1;
+  bool bool_value = 2;
+}
+
+message NumberMessage {
+  float float_value = 1 [(indent.log.Include) = true];
+  double double_value = 2 [(indent.log.Include) = true];
+
+  int32 int32_value = 3 [(indent.log.Include) = true];
+  int64 int64_value = 4 [(indent.log.Include) = true];
+  uint32 uint32_value = 5 [(indent.log.Include) = true];
+  uint64 uint64_value = 6 [(indent.log.Include) = true];
+  sint32 sint32_value = 7 [(indent.log.Include) = true];
+  sint64 sint64_value = 8 [(indent.log.Include) = true];
+
+  fixed32 fixed32_value = 9 [(indent.log.Include) = true];
+  fixed64 fixed64_value = 10 [(indent.log.Include) = true];
+  sfixed32 sfixed32_value = 11 [(indent.log.Include) = true];
+  sfixed64 sfixed64_value = 12 [(indent.log.Include) = true];
+}
+
+message NotLoggingNumberMessage {
+  float float_value = 1;
+  double double_value = 2;
+
+  int32 int32_value = 3;
+  int64 int64_value = 4;
+  uint32 uint32_value = 5;
+  uint64 uint64_value = 6;
+  sint32 sint32_value = 7;
+  sint64 sint64_value = 8;
+
+  fixed32 fixed32_value = 9;
+  fixed64 fixed64_value = 10;
+  sfixed32 sfixed32_value = 11;
+  sfixed64 sfixed64_value = 12;
+}
+
+message RepeatedNumberMessage {
+  repeated float float_values = 1 [(indent.log.Include) = true];
+  repeated double double_values = 2 [(indent.log.Include) = true];
+
+  repeated int32 int32_values = 3 [(indent.log.Include) = true];
+  repeated int64 int64_values = 4 [(indent.log.Include) = true];
+  repeated uint32 uint32_values = 5 [(indent.log.Include) = true];
+  repeated uint64 uint64_values = 6 [(indent.log.Include) = true];
+  repeated sint32 sint32_values = 7 [(indent.log.Include) = true];
+  repeated sint64 sint64_values = 8 [(indent.log.Include) = true];
+
+  repeated fixed32 fixed32_values = 9 [(indent.log.Include) = true];
+  repeated fixed64 fixed64_values = 10 [(indent.log.Include) = true];
+  repeated sfixed32 sfixed32_values = 11 [(indent.log.Include) = true];
+  repeated sfixed64 sfixed64_values = 12 [(indent.log.Include) = true];
+}
+
+message NotLoggingRepeatedNumberMessage {
+  repeated float float_values = 1;
+  repeated double double_values = 2;
+
+  repeated int32 int32_values = 3;
+  repeated int64 int64_values = 4;
+  repeated uint32 uint32_values = 5;
+  repeated uint64 uint64_values = 6;
+  repeated sint32 sint32_values = 7;
+  repeated sint64 sint64_values = 8;
+
+  repeated fixed32 fixed32_values = 9;
+  repeated fixed64 fixed64_values = 10;
+  repeated sfixed32 sfixed32_values = 11;
+  repeated sfixed64 sfixed64_values = 12;
+}
+
+message NestedMessage {
+  message Nested {
+    int32 int32_value = 1 [(indent.log.Include) = true];
+    string string_value = 2 [(indent.log.Include) = true];
+  }
+  Nested nested_value = 1 [(indent.log.Include) = true];
+  repeated Nested repeated_nested_values = 2 [(indent.log.Include) = true];
+}
+
+message NotLoggingNestedMessage {
+  message Nested {
+    int32 int32_value = 1;
+    string string_value = 2;
+  }
+  Nested nested_value = 1;
+  repeated Nested repeated_nested_values = 2;
+}
+
+message EnumMessage {
+  NumericEnum numeric_enum_value = 1 [(indent.log.Include) = true];
+  repeated NumericEnum repeated_numeric_enum_values = 2 [(indent.log.Include) = true];
+
+  AliasedEnum aliased_enum_value = 3 [(indent.log.Include) = true];
+
+  enum Nested {
+    UNKNOWN = 0;
+    PENDING  = 1;
+    COMPLETED  = 2;
+  }
+  Nested nested_enum_value = 4 [(indent.log.Include) = true];
+  repeated Nested repeated_nested_enum_values = 5 [(indent.log.Include) = true];
+}
+
+message NotLoggingEnumMessage {
+  NumericEnum numeric_enum_value = 1;
+  repeated NumericEnum repeated_numeric_enum_values = 2;
+
+  AliasedEnum aliased_enum_value = 3;
+
+  enum Nested {
+    UNKNOWN = 0;
+    PENDING  = 1;
+    COMPLETED  = 2;
+  }
+  Nested nested_enum_value = 4;
+  repeated Nested repeated_nested_enum_values = 5;
+}
+
+enum NumericEnum {
+  ZERO = 0;
+  ONE  = 1;
+  TWO  = 2;
+}
+
+enum AliasedEnum {
+  option allow_alias = true;
+  UNKNOWN = 0;
+  STARTED = 1;
+  RUNNING = 1;
+}
+
+message Oneof {
+  oneof oneof_value {
+    int32 int32_value = 1 [(indent.log.Include) = true];
+    string string_value = 2 [(indent.log.Include) = true];
+  }
+}
+
+message OneofMessage {
+  oneof oneof_value {
+    int32 int32_value = 1 [(indent.log.Include) = true];
+    string string_value = 2 [(indent.log.Include) = true];
+  }
+
+  repeated Oneof repeated_oneof_values = 3 [(indent.log.Include) = true];
+}
+
+message NotLoggingOneofMessage {
+  oneof oneof_value {
+    int32 int32_value = 1;
+    string string_value = 2;
+  }
+
+  repeated Oneof repeated_oneof_values = 3;
+}
+
+message MapMessage {
+  map<int32, string> mapped_value = 1 [(indent.log.Include) = true];
+  map<string, NumericEnum> mapped_enum_value = 2 [(indent.log.Include) = true];
+  map<string, NestedMessage> mapped_nested_value = 3 [(indent.log.Include) = true];
+}
+
+message NotLoggingMapMessage {
+  map<int32, string> mapped_value = 1;
+  map<string, NumericEnum> mapped_enum_value = 2;
+  map<string, NestedMessage> mapped_nested_value = 3;
+}
+
+message JsonNameOptionMessage {
+  string string_value = 1 [json_name="renamed_value", (indent.log.Include) = true];
+}
+
+message NotLoggingJsonNameOptionMessage {
+  string string_value = 1 [json_name="renamed_value"];
+}
+
+message WellKnownTypeMessage {
+  google.protobuf.Duration duration = 1 [(indent.log.Include) = true];
+  google.protobuf.Timestamp timestamp = 2 [(indent.log.Include) = true];
+}
+
+message NotLoggingWellKnownTypeMessage {
+  google.protobuf.Duration duration = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+message MixedLoggingMessage {
+  string string_value = 1 [(indent.log.Include) = true];
+  bool bool_value = 2 [(indent.log.Include) = false];
+  int32 int32_value = 3;
+}
