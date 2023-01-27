@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package indent.log;
+
+option csharp_namespace = "Indent.Log";
+option go_package = "indent/log;log";
+option java_multiple_files = true;
+option java_outer_classname = "LogProto";
+option java_package = "com.indent.log";
+option objc_class_prefix = "IXX";
+option php_namespace = "Indent\\Log";
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.FieldOptions {
+    bool Include = 64555;
+}

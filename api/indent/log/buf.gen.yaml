@@ -1,0 +1,12 @@
+version: v1beta1
+
+plugins:
+  - name: go
+    out: api
+    path: _out/protoc-gen-go
+  - name: zap
+    opt: "conservative=false"
+    out: api
+    path: _out/protoc-gen-zap-marshaler
+  - name: java
+    out: java/indent-log/src/main/java

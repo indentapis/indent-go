@@ -1,0 +1,59 @@
+// Package rand provides utilities for generating random values.
+package rand
+
+import (
+	"crypto/rand"
+	"fmt"
+	"math/big"
+	"time"
+
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/timestamp"
+)
+
+// Str generates a randomized string of the specified length.
+func Str(length int) (str string) {
+	chars := "0123456789abcdefghijklmnopqrstuvwxyz"
+	for i := 0; i < length; i++ {
+		c := string(chars[Intn(len(chars))])
+		str += c
+	}
+	return
+}
+
+// VariableStr returns a randomized string with a uniform random length between
+// min and max.
+func VariableStr(min, max int) string {
+	length := min
+	if d := max - min; d > 0 {
+		length += Intn(d)
+	}
+	return Str(length)
+}
+
+// Intn returns a number in [0, max).
+func Intn(max int) int {
+	num, err := rand.Int(rand.Reader, big.NewInt(int64(max)))
+	if err != nil {
+		panic(err)
+	}
+	return int(num.Int64())
+}
+
+// Timestamp returns a uniformly random timestamp between (center - variance/2)
+// and (center + variance/2).
+func Timestamp(center time.Time, variance time.Duration) *timestamp.Timestamp {
+	variance64 := int64(variance)
+	// Get a random scaledVariance in range [0, variance].
+	scaledVariance, err := rand.Int(rand.Reader, big.NewInt(variance64))
+	if err != nil {
+		panic(err)
+	}
+	// Transpose scaled variance into range [-variance/2, variance/2].
+	d := scaledVariance.Int64() - (variance64 / 2)
+	ts, err := ptypes.TimestampProto(center.Add(time.Duration(d)))
+	if err != nil {
+		panic(fmt.Errorf("failed to convert time to timestamp: %w", err))
+	}
+	return ts
+}
