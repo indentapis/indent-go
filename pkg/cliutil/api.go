@@ -24,13 +24,24 @@ type APIClient interface {
 
 // NewAPIClient creates a client configured with f.
 func NewAPIClient(ctx context.Context, f Factory) (APIClient, error) {
+	// these need to be pre-defined as short-form declaration leaves them in the wrong scope
+	var creds credentials.PerRPCCredentials
+	var err error
+
 	config := f.Config()
+	if config.JSONKeyFile != "" {
+		creds, err = oauth.NewJWTAccessFromFile(config.JSONKeyFile)
+		if err != nil {
+			return nil, fmt.Errorf("could not read service account JSON key file: %w", err)
+		}
+	} else {
+		creds = oauth.TokenSource{TokenSource: f.Store()}
+	}
 	conn, err := grpc.DialContext(ctx,
 		config.Target,
 		grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")),
-		grpc.WithPerRPCCredentials(oauth.TokenSource{
-			TokenSource: f.Store(),
-		}))
+		grpc.WithPerRPCCredentials(creds),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to Platform API: %w", err)
 	}

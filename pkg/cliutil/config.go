@@ -24,4 +24,8 @@ type Config struct {
 
 	// Staging specifies that the staging environment should be used.
 	Staging bool
+
+	// JSONKeyFile specifies a path to a Google Developers service account
+	// JSON key file. If none, then a standard oauth token is expected.
+	JSONKeyFile string
 }
