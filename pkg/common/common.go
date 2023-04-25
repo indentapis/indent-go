@@ -12,4 +12,7 @@ const (
 
 	// LabelDescription provides an excerpt for a Resource.
 	LabelDescription = "description"
+
+	// LabelReason provides a comma-delimited list of example reasons for a Resource.
+	LabelReason = "reason"
 )

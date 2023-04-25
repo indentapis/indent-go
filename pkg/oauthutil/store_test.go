@@ -106,7 +106,7 @@ func newTestStore(t *testing.T, name string) *FileStore {
 	t.Helper()
 	tmpDir, err := os.MkdirTemp("", testStoreName+name)
 	assert.NoError(t, err)
-	store := NewStore(name)
+	store := NewStore(tmpDir, name)
 	store.Directory = tmpDir
 	return store
 }

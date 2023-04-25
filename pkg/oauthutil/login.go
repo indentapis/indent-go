@@ -11,12 +11,8 @@ import (
 
 	"golang.org/x/oauth2"
 
+	"go.indent.com/indent-go/pkg/common"
 	"go.indent.com/indent-go/pkg/rand"
-)
-
-const (
-	// stateLen is the length of the OAuth2 'state' string.
-	stateLen = 6
 )
 
 var (
@@ -49,7 +45,7 @@ func Login(opts *LoginOptions) (code string, err error) {
 	opts.OAuth.RedirectURL = "http://" + opts.ListenAddr + "/auth"
 
 	// setup handler for specified state
-	state := rand.Str(stateLen)
+	state := rand.Str(common.StateLen)
 	handler, codeChan := newLoginHandler(state)
 
 	// start server
