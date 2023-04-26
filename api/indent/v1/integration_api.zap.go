@@ -95,6 +95,14 @@ func (m *Failure) MarshalLogObject(oe zapcore.ObjectEncoder) error {
 		return nil
 	}
 
+	keyName = "Status" // field status = 3
+	if m.Status != nil {
+		var vv interface{} = m.Status
+		if marshaler, ok := vv.(zapcore.ObjectMarshaler); ok {
+			oe.AddObject(keyName, marshaler)
+		}
+	}
+
 	keyName = "Install" // field install = 7
 	if m.Install != nil {
 		var vv interface{} = m.Install

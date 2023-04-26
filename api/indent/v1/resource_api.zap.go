@@ -5,5 +5,35 @@
 package indentv1
 
 import (
-	_ "go.uber.org/zap/zapcore"
+	zapcore "go.uber.org/zap/zapcore"
 )
+
+func (m *SyncPolicy) MarshalLogObject(oe zapcore.ObjectEncoder) error {
+	var keyName string
+	_ = keyName
+
+	if m == nil {
+		return nil
+	}
+
+	keyName = "Meta" // field meta = 5
+	if m.Meta != nil {
+		var vv interface{} = m.Meta
+		if marshaler, ok := vv.(zapcore.ObjectMarshaler); ok {
+			oe.AddObject(keyName, marshaler)
+		}
+	}
+
+	keyName = "Schedule" // field schedule = 20
+	oe.AddString(keyName, m.Schedule)
+
+	keyName = "Kinds" // field kinds = 40
+	oe.AddArray(keyName, zapcore.ArrayMarshalerFunc(func(ae zapcore.ArrayEncoder) error {
+		for _, rv := range m.Kinds {
+			ae.AppendString(rv)
+		}
+		return nil
+	}))
+
+	return nil
+}
