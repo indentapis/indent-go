@@ -31,11 +31,11 @@ var (
 // Environment specifies the Indent environment being connected to.
 type Environment struct {
 	// Name of the environment.
-	Name string
+	Name string `yaml:"name"`
 
 	// Target is the gRPC endpoint dialed to connect.
-	Target string
+	Target string `yaml:"target"`
 
 	// OAuth contains the configuration used to authenticate with OAuth2.
-	OAuth *oauth2.Config
+	OAuth *oauth2.Config `yaml:"oauth"`
 }

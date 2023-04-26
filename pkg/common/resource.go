@@ -20,6 +20,11 @@ const (
 )
 
 const (
+	// LabelResourceAutoApproval indicates that the resource is auto-approved.
+	LabelResourceAutoApproval = "auto_approval"
+)
+
+const (
 	// ResourceSchema tracks the version of the Resource schema.
 	ResourceSchema = "indent.audit.v1beta1.Resource"
 )

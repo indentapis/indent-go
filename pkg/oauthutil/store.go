@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	fileModeDir os.FileMode = 0o600
+	fileModeDir = os.FileMode(0o700)
 )
 
 var (
@@ -36,9 +36,9 @@ type Store interface {
 }
 
 // NewStore returns a FileStore with defaults set.
-func NewStore(envName string) *FileStore {
+func NewStore(credentialDir, envName string) *FileStore {
 	return &FileStore{
-		Directory: credentialDir(),
+		Directory: credentialDir,
 		Filename:  envName,
 	}
 }

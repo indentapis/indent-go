@@ -3,7 +3,11 @@ package cliutil
 import (
 	"context"
 	"fmt"
+	"os"
+	"path/filepath"
 
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"k8s.io/apimachinery/pkg/labels"
@@ -11,8 +15,14 @@ import (
 	auditv1 "go.indent.com/indent-go/api/indent/audit/v1"
 	indentv1 "go.indent.com/indent-go/api/indent/v1"
 	"go.indent.com/indent-go/pkg/common"
+	"go.indent.com/indent-go/pkg/fileutil"
 	"go.indent.com/indent-go/pkg/oauthutil"
 	"go.indent.com/indent-go/pkg/petitioncfg"
+)
+
+const (
+	// configDirPerm is the permission bits for the configuration directory.
+	configDirPerm = os.FileMode(0o750)
 )
 
 // Ensure Factory is implemented.
@@ -20,11 +30,17 @@ var _ Factory = new(factoryImpl)
 
 // Factory provides shared configuration used across the CLI.
 type Factory interface {
+	// Setup readies the factory for use.
+	Setup()
+
 	// Logger returns a zap.Logger for logging messages in the CLI.
 	Logger() *zap.Logger
 
 	// Config returns the global configuration of the CLI.
 	Config() *Config
+
+	// WriteConfig writes the current configuration to disk.
+	WriteConfig()
 
 	// Store returns a token Store.
 	Store() oauthutil.Store
@@ -43,45 +59,75 @@ type Factory interface {
 }
 
 // New returns a new Factory using defaults to authenticate against the Platform API.
-func New() (Factory, *Config) {
+func New(rootCmd *cobra.Command) (Factory, *Config) {
 	logger, err := zap.NewProduction(zap.IncreaseLevel(zapcore.InfoLevel))
 	if err != nil {
 		panic(fmt.Sprintf("failed to setup logger: %v", err))
 	}
 
-	config := NewConfig()
+	config := NewConfig(logger)
 	return &factoryImpl{
-		logger: logger,
-		config: config,
+		logger:  logger,
+		rootCmd: rootCmd,
+		config:  config,
 	}, config
 }
 
 // factoryImpl is the runtime implementation of Factory.
 type factoryImpl struct {
-	logger *zap.Logger
-	config *Config
-	store  oauthutil.Store
+	logger  *zap.Logger
+	rootCmd *cobra.Command
+	config  *Config
+	store   oauthutil.Store
+}
+
+func (f *factoryImpl) Setup() {
+	if err := viper.BindPFlags(f.rootCmd.Flags()); err != nil {
+		f.logger.Fatal("Failed to bind flags", zap.Error(err))
+	}
+	f.config.refresh(f.logger)
 }
 
 func (f *factoryImpl) Logger() *zap.Logger {
-	return f.logger
+	logger := f.logger.With(
+		zap.String("config", viper.ConfigFileUsed()),
+		zap.String("space", f.config.Space),
+		zap.String("environment", f.config.Environment.Name),
+	)
+	return logger
 }
 
 func (f *factoryImpl) Config() *Config {
-	f.setupEnv()
 	return f.config
 }
 
+func (f *factoryImpl) WriteConfig() {
+	logger := f.Logger()
+
+	// resolve creation / permission issues
+	if dirErr, parentErr := f.writeStatus(); dirErr != nil {
+		if parentErr != nil {
+			f.printFixPermissionsAndExit()
+		} else if dirErr = os.MkdirAll(f.config.configDir, configDirPerm); dirErr != nil {
+			logger.Fatal("Failed to create config directory", zap.Error(dirErr))
+		}
+	}
+
+	logger.Debug("Writing configuration file")
+	if err := viper.WriteConfig(); err != nil {
+		logger.Fatal("Failed to write config file", zap.Error(err))
+	}
+	f.config.refresh(logger)
+}
+
 func (f *factoryImpl) Store() oauthutil.Store {
-	f.setupEnv()
 	if f.store == nil {
-		f.store = oauthutil.NewStore(f.config.Environment.Name)
+		f.store = oauthutil.NewStore(credentialDir(f.config.configDir), f.config.Environment.Name)
 	}
 	return f.store
 }
 
 func (f *factoryImpl) API(ctx context.Context) APIClient {
-	f.setupEnv()
 	logger := f.Logger()
 	client, err := NewAPIClient(ctx, f)
 	if err != nil {
@@ -108,12 +154,6 @@ func (f *factoryImpl) IsLoggedIn(ctx context.Context) bool {
 		return false
 	}
 	return true
-}
-
-func (f *factoryImpl) setupEnv() {
-	if f.config.Staging {
-		f.config.Environment = envStaging
-	}
 }
 
 // ConfigName returns the ConfigName for the space.
@@ -143,4 +183,21 @@ func (f *factoryImpl) AppConfigName(ctx context.Context) string {
 		logger.Fatal("Config ID is not set on the block", zap.Error(err), zap.Object("block", cfgBlock))
 	}
 	return name
+}
+
+// writeStatus checks if the config file, and it's parent directory are writable.
+func (f *factoryImpl) writeStatus() (dirErr, parentErr error) {
+	parent := filepath.Dir(f.config.configDir)
+	dirErr = fileutil.IsWritable(f.config.configDir)
+	parentErr = fileutil.IsWritable(parent)
+	return
+}
+
+// printFixPermissionsAndExit prints instructions for setting up the config directory.
+func (f *factoryImpl) printFixPermissionsAndExit() {
+	logger := f.Logger()
+	if err := fileutil.PrintPermissionsFix(f.rootCmd.OutOrStderr(), f.config.configDir); err != nil {
+		logger.Fatal("Failed to print config directory setup", zap.Error(err))
+	}
+	os.Exit(0)
 }

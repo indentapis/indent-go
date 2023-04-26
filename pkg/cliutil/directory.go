@@ -1,28 +1,28 @@
-package oauthutil
+package cliutil
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
+
+	"go.uber.org/zap"
 )
 
 const (
 	// configDirName is the name of the Indent CLI configuration directory.
-	configDirName = "indentcli"
+	configDirName = "access"
 
 	// credentialDirName is name of the directory containing Platform Credentials.
 	credentialDirName = "credentials"
 )
 
-func configDir() string {
+func userConfigDir(logger *zap.Logger) string {
 	dir, err := os.UserConfigDir()
 	if err != nil {
-		panic(fmt.Sprintf("Failed to detect user config dir: %v", err))
+		logger.Fatal("Failed to get user config directory", zap.Error(err))
 	}
-
 	return filepath.Join(dir, configDirName)
 }
 
-func credentialDir() string {
-	return filepath.Join(configDir(), credentialDirName)
+func credentialDir(configDir string) string {
+	return filepath.Join(configDir, credentialDirName)
 }

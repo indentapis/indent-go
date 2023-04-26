@@ -8,6 +8,7 @@ import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
 	v1 "go.indent.com/indent-go/api/indent/audit/v1"
+	_ "go.indent.com/indent-go/api/indent/log"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	status "google.golang.org/genproto/googleapis/rpc/status"
 	grpc "google.golang.org/grpc"
@@ -757,6 +758,112 @@ func (m *PullUpdateResponse) GetStatus() *status.Status {
 	return nil
 }
 
+type PushUpdateRequest struct {
+	// SpaceName where Resources should be synced.
+	SpaceName string `protobuf:"bytes,1,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
+	// Kinds to be synced.
+	Kinds []string `protobuf:"bytes,40,rep,name=kinds,proto3" json:"kinds,omitempty"`
+	// Flags specifying options for how the push is performed.
+	Flags                map[string]string `protobuf:"bytes,60,rep,name=flags,proto3" json:"flags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *PushUpdateRequest) Reset()         { *m = PushUpdateRequest{} }
+func (m *PushUpdateRequest) String() string { return proto.CompactTextString(m) }
+func (*PushUpdateRequest) ProtoMessage()    {}
+func (*PushUpdateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_83848b671d59984f, []int{14}
+}
+
+func (m *PushUpdateRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PushUpdateRequest.Unmarshal(m, b)
+}
+func (m *PushUpdateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PushUpdateRequest.Marshal(b, m, deterministic)
+}
+func (m *PushUpdateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PushUpdateRequest.Merge(m, src)
+}
+func (m *PushUpdateRequest) XXX_Size() int {
+	return xxx_messageInfo_PushUpdateRequest.Size(m)
+}
+func (m *PushUpdateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_PushUpdateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PushUpdateRequest proto.InternalMessageInfo
+
+func (m *PushUpdateRequest) GetSpaceName() string {
+	if m != nil {
+		return m.SpaceName
+	}
+	return ""
+}
+
+func (m *PushUpdateRequest) GetKinds() []string {
+	if m != nil {
+		return m.Kinds
+	}
+	return nil
+}
+
+func (m *PushUpdateRequest) GetFlags() map[string]string {
+	if m != nil {
+		return m.Flags
+	}
+	return nil
+}
+
+type PushUpdateResponse struct {
+	// Resources that were synced
+	Resources            []*v1.Resource `protobuf:"bytes,5,rep,name=resources,proto3" json:"resources,omitempty"`
+	Status               *status.Status `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *PushUpdateResponse) Reset()         { *m = PushUpdateResponse{} }
+func (m *PushUpdateResponse) String() string { return proto.CompactTextString(m) }
+func (*PushUpdateResponse) ProtoMessage()    {}
+func (*PushUpdateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_83848b671d59984f, []int{15}
+}
+
+func (m *PushUpdateResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PushUpdateResponse.Unmarshal(m, b)
+}
+func (m *PushUpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PushUpdateResponse.Marshal(b, m, deterministic)
+}
+func (m *PushUpdateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PushUpdateResponse.Merge(m, src)
+}
+func (m *PushUpdateResponse) XXX_Size() int {
+	return xxx_messageInfo_PushUpdateResponse.Size(m)
+}
+func (m *PushUpdateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_PushUpdateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PushUpdateResponse proto.InternalMessageInfo
+
+func (m *PushUpdateResponse) GetResources() []*v1.Resource {
+	if m != nil {
+		return m.Resources
+	}
+	return nil
+}
+
+func (m *PushUpdateResponse) GetStatus() *status.Status {
+	if m != nil {
+		return m.Status
+	}
+	return nil
+}
+
 type ApplyUpdateResponse struct {
 	// Response from change webhook request
 	Status               *status.Status `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
@@ -769,7 +876,7 @@ func (m *ApplyUpdateResponse) Reset()         { *m = ApplyUpdateResponse{} }
 func (m *ApplyUpdateResponse) String() string { return proto.CompactTextString(m) }
 func (*ApplyUpdateResponse) ProtoMessage()    {}
 func (*ApplyUpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{14}
+	return fileDescriptor_83848b671d59984f, []int{16}
 }
 
 func (m *ApplyUpdateResponse) XXX_Unmarshal(b []byte) error {
@@ -811,7 +918,7 @@ func (m *GetDecisionResponse) Reset()         { *m = GetDecisionResponse{} }
 func (m *GetDecisionResponse) String() string { return proto.CompactTextString(m) }
 func (*GetDecisionResponse) ProtoMessage()    {}
 func (*GetDecisionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{15}
+	return fileDescriptor_83848b671d59984f, []int{17}
 }
 
 func (m *GetDecisionResponse) XXX_Unmarshal(b []byte) error {
@@ -866,7 +973,7 @@ func (m *ListResourcePoliciesRequest) Reset()         { *m = ListResourcePolicie
 func (m *ListResourcePoliciesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListResourcePoliciesRequest) ProtoMessage()    {}
 func (*ListResourcePoliciesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{16}
+	return fileDescriptor_83848b671d59984f, []int{18}
 }
 
 func (m *ListResourcePoliciesRequest) XXX_Unmarshal(b []byte) error {
@@ -936,7 +1043,7 @@ func (m *ListResourcePoliciesResponse) Reset()         { *m = ListResourcePolici
 func (m *ListResourcePoliciesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListResourcePoliciesResponse) ProtoMessage()    {}
 func (*ListResourcePoliciesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{17}
+	return fileDescriptor_83848b671d59984f, []int{19}
 }
 
 func (m *ListResourcePoliciesResponse) XXX_Unmarshal(b []byte) error {
@@ -985,7 +1092,7 @@ func (m *GetResourcePolicyRequest) Reset()         { *m = GetResourcePolicyReque
 func (m *GetResourcePolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*GetResourcePolicyRequest) ProtoMessage()    {}
 func (*GetResourcePolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{18}
+	return fileDescriptor_83848b671d59984f, []int{20}
 }
 
 func (m *GetResourcePolicyRequest) XXX_Unmarshal(b []byte) error {
@@ -1034,7 +1141,7 @@ func (m *CreateResourcePolicyRequest) Reset()         { *m = CreateResourcePolic
 func (m *CreateResourcePolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateResourcePolicyRequest) ProtoMessage()    {}
 func (*CreateResourcePolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{19}
+	return fileDescriptor_83848b671d59984f, []int{21}
 }
 
 func (m *CreateResourcePolicyRequest) XXX_Unmarshal(b []byte) error {
@@ -1085,7 +1192,7 @@ func (m *UpdateResourcePolicyRequest) Reset()         { *m = UpdateResourcePolic
 func (m *UpdateResourcePolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateResourcePolicyRequest) ProtoMessage()    {}
 func (*UpdateResourcePolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{20}
+	return fileDescriptor_83848b671d59984f, []int{22}
 }
 
 func (m *UpdateResourcePolicyRequest) XXX_Unmarshal(b []byte) error {
@@ -1141,7 +1248,7 @@ func (m *DeleteResourcePolicyRequest) Reset()         { *m = DeleteResourcePolic
 func (m *DeleteResourcePolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteResourcePolicyRequest) ProtoMessage()    {}
 func (*DeleteResourcePolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{21}
+	return fileDescriptor_83848b671d59984f, []int{23}
 }
 
 func (m *DeleteResourcePolicyRequest) XXX_Unmarshal(b []byte) error {
@@ -1192,7 +1299,7 @@ func (m *TestResourcePolicyRequest) Reset()         { *m = TestResourcePolicyReq
 func (m *TestResourcePolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*TestResourcePolicyRequest) ProtoMessage()    {}
 func (*TestResourcePolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{22}
+	return fileDescriptor_83848b671d59984f, []int{24}
 }
 
 func (m *TestResourcePolicyRequest) XXX_Unmarshal(b []byte) error {
@@ -1246,7 +1353,7 @@ func (m *TestResourcePolicyResponse) Reset()         { *m = TestResourcePolicyRe
 func (m *TestResourcePolicyResponse) String() string { return proto.CompactTextString(m) }
 func (*TestResourcePolicyResponse) ProtoMessage()    {}
 func (*TestResourcePolicyResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{23}
+	return fileDescriptor_83848b671d59984f, []int{25}
 }
 
 func (m *TestResourcePolicyResponse) XXX_Unmarshal(b []byte) error {
@@ -1288,7 +1395,7 @@ func (m *ResourcePolicy) Reset()         { *m = ResourcePolicy{} }
 func (m *ResourcePolicy) String() string { return proto.CompactTextString(m) }
 func (*ResourcePolicy) ProtoMessage()    {}
 func (*ResourcePolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{24}
+	return fileDescriptor_83848b671d59984f, []int{26}
 }
 
 func (m *ResourcePolicy) XXX_Unmarshal(b []byte) error {
@@ -1325,7 +1432,7 @@ func (m *ResourcePolicy) GetBase() *PolicyBase {
 
 type ListPullPoliciesResponse struct {
 	// Paginated list of PullUpdatePolicies in a Space.
-	Policies []*PullUpdatePolicy `protobuf:"bytes,1,rep,name=policies,proto3" json:"policies,omitempty"`
+	Policies []*SyncPolicy `protobuf:"bytes,1,rep,name=policies,proto3" json:"policies,omitempty"`
 	// Page cursor for list of ResourcePolicies.
 	NextPageToken        string   `protobuf:"bytes,5,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -1337,7 +1444,7 @@ func (m *ListPullPoliciesResponse) Reset()         { *m = ListPullPoliciesRespon
 func (m *ListPullPoliciesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListPullPoliciesResponse) ProtoMessage()    {}
 func (*ListPullPoliciesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{25}
+	return fileDescriptor_83848b671d59984f, []int{27}
 }
 
 func (m *ListPullPoliciesResponse) XXX_Unmarshal(b []byte) error {
@@ -1358,7 +1465,7 @@ func (m *ListPullPoliciesResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListPullPoliciesResponse proto.InternalMessageInfo
 
-func (m *ListPullPoliciesResponse) GetPolicies() []*PullUpdatePolicy {
+func (m *ListPullPoliciesResponse) GetPolicies() []*SyncPolicy {
 	if m != nil {
 		return m.Policies
 	}
@@ -1375,18 +1482,18 @@ func (m *ListPullPoliciesResponse) GetNextPageToken() string {
 type CreatePullPolicyRequest struct {
 	// Space where ResourcePolicy should be created.
 	SpaceName string `protobuf:"bytes,1,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
-	// PullUpdatePolicy being created, name is ignored and will be autogenerated.
-	Policy               *PullUpdatePolicy `protobuf:"bytes,40,opt,name=policy,proto3" json:"policy,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	// SyncPolicy being created, name is ignored and will be autogenerated.
+	Policy               *SyncPolicy `protobuf:"bytes,40,opt,name=policy,proto3" json:"policy,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
 func (m *CreatePullPolicyRequest) Reset()         { *m = CreatePullPolicyRequest{} }
 func (m *CreatePullPolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*CreatePullPolicyRequest) ProtoMessage()    {}
 func (*CreatePullPolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{26}
+	return fileDescriptor_83848b671d59984f, []int{28}
 }
 
 func (m *CreatePullPolicyRequest) XXX_Unmarshal(b []byte) error {
@@ -1414,7 +1521,7 @@ func (m *CreatePullPolicyRequest) GetSpaceName() string {
 	return ""
 }
 
-func (m *CreatePullPolicyRequest) GetPolicy() *PullUpdatePolicy {
+func (m *CreatePullPolicyRequest) GetPolicy() *SyncPolicy {
 	if m != nil {
 		return m.Policy
 	}
@@ -1426,18 +1533,18 @@ type UpdatePullPolicyRequest struct {
 	SpaceName string `protobuf:"bytes,1,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
 	// Name of the PullUpdatePolicy being updated.
 	PolicyName string `protobuf:"bytes,3,opt,name=policy_name,json=policyName,proto3" json:"policy_name,omitempty"`
-	// PullUpdatePolicy being updated, name is ignored.
-	Policy               *PullUpdatePolicy `protobuf:"bytes,40,opt,name=policy,proto3" json:"policy,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	// SyncPolicy being updated, name is ignored.
+	Policy               *SyncPolicy `protobuf:"bytes,40,opt,name=policy,proto3" json:"policy,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
 func (m *UpdatePullPolicyRequest) Reset()         { *m = UpdatePullPolicyRequest{} }
 func (m *UpdatePullPolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdatePullPolicyRequest) ProtoMessage()    {}
 func (*UpdatePullPolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{27}
+	return fileDescriptor_83848b671d59984f, []int{29}
 }
 
 func (m *UpdatePullPolicyRequest) XXX_Unmarshal(b []byte) error {
@@ -1472,14 +1579,14 @@ func (m *UpdatePullPolicyRequest) GetPolicyName() string {
 	return ""
 }
 
-func (m *UpdatePullPolicyRequest) GetPolicy() *PullUpdatePolicy {
+func (m *UpdatePullPolicyRequest) GetPolicy() *SyncPolicy {
 	if m != nil {
 		return m.Policy
 	}
 	return nil
 }
 
-type PullUpdatePolicy struct {
+type SyncPolicy struct {
 	// Meta contains metadata about the ResourcePolicy.
 	Meta *v1.Meta `protobuf:"bytes,5,opt,name=meta,proto3" json:"meta,omitempty"`
 	// Base contains generic Policy fields.
@@ -1488,72 +1595,308 @@ type PullUpdatePolicy struct {
 	Schedule string `protobuf:"bytes,20,opt,name=schedule,proto3" json:"schedule,omitempty"`
 	// Kinds to be updated or created.
 	Kinds []string `protobuf:"bytes,40,rep,name=kinds,proto3" json:"kinds,omitempty"`
-	// Flags specifying options for how the pull is performed.
+	// Flags specifying options for how the pull/push is performed.
 	Flags                map[string]string `protobuf:"bytes,60,rep,name=flags,proto3" json:"flags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
 }
 
-func (m *PullUpdatePolicy) Reset()         { *m = PullUpdatePolicy{} }
-func (m *PullUpdatePolicy) String() string { return proto.CompactTextString(m) }
-func (*PullUpdatePolicy) ProtoMessage()    {}
-func (*PullUpdatePolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83848b671d59984f, []int{28}
+func (m *SyncPolicy) Reset()         { *m = SyncPolicy{} }
+func (m *SyncPolicy) String() string { return proto.CompactTextString(m) }
+func (*SyncPolicy) ProtoMessage()    {}
+func (*SyncPolicy) Descriptor() ([]byte, []int) {
+	return fileDescriptor_83848b671d59984f, []int{30}
 }
 
-func (m *PullUpdatePolicy) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PullUpdatePolicy.Unmarshal(m, b)
+func (m *SyncPolicy) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SyncPolicy.Unmarshal(m, b)
 }
-func (m *PullUpdatePolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PullUpdatePolicy.Marshal(b, m, deterministic)
+func (m *SyncPolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SyncPolicy.Marshal(b, m, deterministic)
 }
-func (m *PullUpdatePolicy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PullUpdatePolicy.Merge(m, src)
+func (m *SyncPolicy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SyncPolicy.Merge(m, src)
 }
-func (m *PullUpdatePolicy) XXX_Size() int {
-	return xxx_messageInfo_PullUpdatePolicy.Size(m)
+func (m *SyncPolicy) XXX_Size() int {
+	return xxx_messageInfo_SyncPolicy.Size(m)
 }
-func (m *PullUpdatePolicy) XXX_DiscardUnknown() {
-	xxx_messageInfo_PullUpdatePolicy.DiscardUnknown(m)
+func (m *SyncPolicy) XXX_DiscardUnknown() {
+	xxx_messageInfo_SyncPolicy.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PullUpdatePolicy proto.InternalMessageInfo
+var xxx_messageInfo_SyncPolicy proto.InternalMessageInfo
 
-func (m *PullUpdatePolicy) GetMeta() *v1.Meta {
+func (m *SyncPolicy) GetMeta() *v1.Meta {
 	if m != nil {
 		return m.Meta
 	}
 	return nil
 }
 
-func (m *PullUpdatePolicy) GetBase() *PolicyBase {
+func (m *SyncPolicy) GetBase() *PolicyBase {
 	if m != nil {
 		return m.Base
 	}
 	return nil
 }
 
-func (m *PullUpdatePolicy) GetSchedule() string {
+func (m *SyncPolicy) GetSchedule() string {
 	if m != nil {
 		return m.Schedule
 	}
 	return ""
 }
 
-func (m *PullUpdatePolicy) GetKinds() []string {
+func (m *SyncPolicy) GetKinds() []string {
 	if m != nil {
 		return m.Kinds
 	}
 	return nil
 }
 
-func (m *PullUpdatePolicy) GetFlags() map[string]string {
+func (m *SyncPolicy) GetFlags() map[string]string {
 	if m != nil {
 		return m.Flags
 	}
 	return nil
 }
+
+type ListPushPoliciesResponse struct {
+	// Paginated list of PushUpdatePolicies in a Space.
+	Policies []*SyncPolicy `protobuf:"bytes,1,rep,name=policies,proto3" json:"policies,omitempty"`
+	// Page cursor for list of ResourcePolicies.
+	NextPageToken        string   `protobuf:"bytes,5,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListPushPoliciesResponse) Reset()         { *m = ListPushPoliciesResponse{} }
+func (m *ListPushPoliciesResponse) String() string { return proto.CompactTextString(m) }
+func (*ListPushPoliciesResponse) ProtoMessage()    {}
+func (*ListPushPoliciesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_83848b671d59984f, []int{31}
+}
+
+func (m *ListPushPoliciesResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListPushPoliciesResponse.Unmarshal(m, b)
+}
+func (m *ListPushPoliciesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListPushPoliciesResponse.Marshal(b, m, deterministic)
+}
+func (m *ListPushPoliciesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListPushPoliciesResponse.Merge(m, src)
+}
+func (m *ListPushPoliciesResponse) XXX_Size() int {
+	return xxx_messageInfo_ListPushPoliciesResponse.Size(m)
+}
+func (m *ListPushPoliciesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListPushPoliciesResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListPushPoliciesResponse proto.InternalMessageInfo
+
+func (m *ListPushPoliciesResponse) GetPolicies() []*SyncPolicy {
+	if m != nil {
+		return m.Policies
+	}
+	return nil
+}
+
+func (m *ListPushPoliciesResponse) GetNextPageToken() string {
+	if m != nil {
+		return m.NextPageToken
+	}
+	return ""
+}
+
+type CreatePushPolicyRequest struct {
+	// Space where ResourcePolicy should be created.
+	SpaceName string `protobuf:"bytes,1,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
+	// SyncPolicy being created, name is ignored and will be autogenerated.
+	Policy               *SyncPolicy `protobuf:"bytes,40,opt,name=policy,proto3" json:"policy,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *CreatePushPolicyRequest) Reset()         { *m = CreatePushPolicyRequest{} }
+func (m *CreatePushPolicyRequest) String() string { return proto.CompactTextString(m) }
+func (*CreatePushPolicyRequest) ProtoMessage()    {}
+func (*CreatePushPolicyRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_83848b671d59984f, []int{32}
+}
+
+func (m *CreatePushPolicyRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreatePushPolicyRequest.Unmarshal(m, b)
+}
+func (m *CreatePushPolicyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreatePushPolicyRequest.Marshal(b, m, deterministic)
+}
+func (m *CreatePushPolicyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreatePushPolicyRequest.Merge(m, src)
+}
+func (m *CreatePushPolicyRequest) XXX_Size() int {
+	return xxx_messageInfo_CreatePushPolicyRequest.Size(m)
+}
+func (m *CreatePushPolicyRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreatePushPolicyRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreatePushPolicyRequest proto.InternalMessageInfo
+
+func (m *CreatePushPolicyRequest) GetSpaceName() string {
+	if m != nil {
+		return m.SpaceName
+	}
+	return ""
+}
+
+func (m *CreatePushPolicyRequest) GetPolicy() *SyncPolicy {
+	if m != nil {
+		return m.Policy
+	}
+	return nil
+}
+
+type UpdatePushPolicyRequest struct {
+	// SpaceName where ResourcePolicy should be updated.
+	SpaceName string `protobuf:"bytes,1,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
+	// Name of the PushUpdatePolicy being updated.
+	PolicyName string `protobuf:"bytes,3,opt,name=policy_name,json=policyName,proto3" json:"policy_name,omitempty"`
+	// SyncPolicy being updated, name is ignored.
+	Policy               *SyncPolicy `protobuf:"bytes,40,opt,name=policy,proto3" json:"policy,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *UpdatePushPolicyRequest) Reset()         { *m = UpdatePushPolicyRequest{} }
+func (m *UpdatePushPolicyRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdatePushPolicyRequest) ProtoMessage()    {}
+func (*UpdatePushPolicyRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_83848b671d59984f, []int{33}
+}
+
+func (m *UpdatePushPolicyRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdatePushPolicyRequest.Unmarshal(m, b)
+}
+func (m *UpdatePushPolicyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdatePushPolicyRequest.Marshal(b, m, deterministic)
+}
+func (m *UpdatePushPolicyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdatePushPolicyRequest.Merge(m, src)
+}
+func (m *UpdatePushPolicyRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdatePushPolicyRequest.Size(m)
+}
+func (m *UpdatePushPolicyRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdatePushPolicyRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdatePushPolicyRequest proto.InternalMessageInfo
+
+func (m *UpdatePushPolicyRequest) GetSpaceName() string {
+	if m != nil {
+		return m.SpaceName
+	}
+	return ""
+}
+
+func (m *UpdatePushPolicyRequest) GetPolicyName() string {
+	if m != nil {
+		return m.PolicyName
+	}
+	return ""
+}
+
+func (m *UpdatePushPolicyRequest) GetPolicy() *SyncPolicy {
+	if m != nil {
+		return m.Policy
+	}
+	return nil
+}
+
+type CreateChannelRequest struct {
+	// Space in which (Slack) channel is being created.
+	SpaceName string `protobuf:"bytes,1,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
+	// Channel name of the new (Slack) conversation to be created.
+	Resource             *v1.Resource `protobuf:"bytes,5,opt,name=resource,proto3" json:"resource,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
+}
+
+func (m *CreateChannelRequest) Reset()         { *m = CreateChannelRequest{} }
+func (m *CreateChannelRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateChannelRequest) ProtoMessage()    {}
+func (*CreateChannelRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_83848b671d59984f, []int{34}
+}
+
+func (m *CreateChannelRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateChannelRequest.Unmarshal(m, b)
+}
+func (m *CreateChannelRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateChannelRequest.Marshal(b, m, deterministic)
+}
+func (m *CreateChannelRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateChannelRequest.Merge(m, src)
+}
+func (m *CreateChannelRequest) XXX_Size() int {
+	return xxx_messageInfo_CreateChannelRequest.Size(m)
+}
+func (m *CreateChannelRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateChannelRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateChannelRequest proto.InternalMessageInfo
+
+func (m *CreateChannelRequest) GetSpaceName() string {
+	if m != nil {
+		return m.SpaceName
+	}
+	return ""
+}
+
+func (m *CreateChannelRequest) GetResource() *v1.Resource {
+	if m != nil {
+		return m.Resource
+	}
+	return nil
+}
+
+type CreateChannelResponse struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateChannelResponse) Reset()         { *m = CreateChannelResponse{} }
+func (m *CreateChannelResponse) String() string { return proto.CompactTextString(m) }
+func (*CreateChannelResponse) ProtoMessage()    {}
+func (*CreateChannelResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_83848b671d59984f, []int{35}
+}
+
+func (m *CreateChannelResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateChannelResponse.Unmarshal(m, b)
+}
+func (m *CreateChannelResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateChannelResponse.Marshal(b, m, deterministic)
+}
+func (m *CreateChannelResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateChannelResponse.Merge(m, src)
+}
+func (m *CreateChannelResponse) XXX_Size() int {
+	return xxx_messageInfo_CreateChannelResponse.Size(m)
+}
+func (m *CreateChannelResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateChannelResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateChannelResponse proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*ListResourcesRequest)(nil), "indent.v1.ListResourcesRequest")
@@ -1571,6 +1914,9 @@ func init() {
 	proto.RegisterType((*PullUpdateRequest)(nil), "indent.v1.PullUpdateRequest")
 	proto.RegisterMapType((map[string]string)(nil), "indent.v1.PullUpdateRequest.FlagsEntry")
 	proto.RegisterType((*PullUpdateResponse)(nil), "indent.v1.PullUpdateResponse")
+	proto.RegisterType((*PushUpdateRequest)(nil), "indent.v1.PushUpdateRequest")
+	proto.RegisterMapType((map[string]string)(nil), "indent.v1.PushUpdateRequest.FlagsEntry")
+	proto.RegisterType((*PushUpdateResponse)(nil), "indent.v1.PushUpdateResponse")
 	proto.RegisterType((*ApplyUpdateResponse)(nil), "indent.v1.ApplyUpdateResponse")
 	proto.RegisterType((*GetDecisionResponse)(nil), "indent.v1.GetDecisionResponse")
 	proto.RegisterType((*ListResourcePoliciesRequest)(nil), "indent.v1.ListResourcePoliciesRequest")
@@ -1585,8 +1931,13 @@ func init() {
 	proto.RegisterType((*ListPullPoliciesResponse)(nil), "indent.v1.ListPullPoliciesResponse")
 	proto.RegisterType((*CreatePullPolicyRequest)(nil), "indent.v1.CreatePullPolicyRequest")
 	proto.RegisterType((*UpdatePullPolicyRequest)(nil), "indent.v1.UpdatePullPolicyRequest")
-	proto.RegisterType((*PullUpdatePolicy)(nil), "indent.v1.PullUpdatePolicy")
-	proto.RegisterMapType((map[string]string)(nil), "indent.v1.PullUpdatePolicy.FlagsEntry")
+	proto.RegisterType((*SyncPolicy)(nil), "indent.v1.SyncPolicy")
+	proto.RegisterMapType((map[string]string)(nil), "indent.v1.SyncPolicy.FlagsEntry")
+	proto.RegisterType((*ListPushPoliciesResponse)(nil), "indent.v1.ListPushPoliciesResponse")
+	proto.RegisterType((*CreatePushPolicyRequest)(nil), "indent.v1.CreatePushPolicyRequest")
+	proto.RegisterType((*UpdatePushPolicyRequest)(nil), "indent.v1.UpdatePushPolicyRequest")
+	proto.RegisterType((*CreateChannelRequest)(nil), "indent.v1.CreateChannelRequest")
+	proto.RegisterType((*CreateChannelResponse)(nil), "indent.v1.CreateChannelResponse")
 }
 
 func init() {
@@ -1594,103 +1945,114 @@ func init() {
 }
 
 var fileDescriptor_83848b671d59984f = []byte{
-	// 1527 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x99, 0xcd, 0x6e, 0xdb, 0xc6,
-	0x13, 0xc0, 0xb1, 0x52, 0xe4, 0xbf, 0x35, 0xb2, 0x1d, 0x65, 0x63, 0x27, 0x0c, 0xed, 0xfc, 0xa3,
-	0xd2, 0x89, 0xa3, 0x18, 0xa9, 0x54, 0xd9, 0x4d, 0x9c, 0xcf, 0x02, 0x76, 0x93, 0x06, 0x29, 0x9a,
-	0xc2, 0x60, 0x3e, 0x90, 0xa6, 0x2d, 0x0c, 0x5a, 0xde, 0x38, 0x84, 0x29, 0x92, 0x11, 0x29, 0x35,
-	0x8a, 0xe1, 0x4b, 0xd0, 0x14, 0x05, 0x82, 0xf4, 0xc3, 0xe9, 0x13, 0xf4, 0xd8, 0x53, 0x2f, 0x7d,
-	0x80, 0x5e, 0x7b, 0xed, 0xad, 0xe7, 0x3e, 0x48, 0xb1, 0xcb, 0x25, 0xc5, 0x25, 0x29, 0x89, 0x92,
-	0x93, 0x9b, 0xb8, 0x3b, 0x3b, 0xf3, 0xdb, 0x99, 0x9d, 0x9d, 0x59, 0x08, 0xe6, 0x74, 0x73, 0x8b,
-	0x98, 0x6e, 0xb5, 0x5d, 0xab, 0x36, 0x89, 0x63, 0xb5, 0x9a, 0x75, 0xb2, 0xa1, 0xd9, 0x7a, 0xc5,
-	0x6e, 0x5a, 0xae, 0x85, 0xf3, 0xde, 0x6c, 0xa5, 0x5d, 0x93, 0xe7, 0xb6, 0x2d, 0x6b, 0xdb, 0x20,
-	0x55, 0xcd, 0xd6, 0xab, 0x9a, 0x69, 0x5a, 0xae, 0xe6, 0xea, 0x96, 0xe9, 0x78, 0x82, 0xf2, 0x71,
-	0x3e, 0xdb, 0xb4, 0xeb, 0x55, 0xc7, 0xd5, 0xdc, 0x96, 0x3f, 0x71, 0x8a, 0xeb, 0xd7, 0x5a, 0x5b,
-	0xba, 0x60, 0xc5, 0x17, 0x38, 0x11, 0x07, 0xe0, 0x53, 0xca, 0x3f, 0x08, 0xa6, 0x3f, 0xd3, 0x1d,
-	0x57, 0xf5, 0xc7, 0x55, 0xf2, 0xb4, 0x45, 0x1c, 0x17, 0x9f, 0x04, 0x70, 0x6c, 0xad, 0x4e, 0x36,
-	0x4c, 0xad, 0x41, 0x24, 0x54, 0x42, 0xe5, 0xbc, 0x9a, 0x67, 0x23, 0x9f, 0x6b, 0x0d, 0x82, 0xcf,
-	0xc0, 0x94, 0xa1, 0x6d, 0x12, 0x63, 0xc3, 0x21, 0x06, 0xa9, 0xbb, 0x56, 0x53, 0xca, 0x30, 0x91,
-	0x49, 0x36, 0x7a, 0x97, 0x0f, 0xe2, 0x63, 0x30, 0x66, 0x68, 0x2e, 0x71, 0x5c, 0x29, 0x5b, 0x42,
-	0xe5, 0x71, 0x95, 0x7f, 0xe1, 0x69, 0xc8, 0x69, 0x0d, 0xcb, 0xdc, 0x96, 0x0e, 0x95, 0xb2, 0xe5,
-	0xbc, 0xea, 0x7d, 0x60, 0x0c, 0x87, 0xda, 0x3a, 0xf9, 0x46, 0xca, 0x31, 0x55, 0xec, 0x37, 0x9e,
-	0x85, 0xbc, 0xad, 0x6d, 0x93, 0x0d, 0x47, 0x7f, 0x4e, 0x24, 0x28, 0xa1, 0x72, 0x4e, 0x1d, 0xa7,
-	0x03, 0x77, 0xf5, 0xe7, 0x84, 0x42, 0xb2, 0x49, 0xd7, 0xda, 0x21, 0xa6, 0x54, 0xf0, 0x20, 0xe9,
-	0xc8, 0x3d, 0x3a, 0xa0, 0x3c, 0x83, 0x99, 0xc8, 0xde, 0x1c, 0xdb, 0x32, 0x1d, 0x82, 0x57, 0x20,
-	0x1f, 0x38, 0x42, 0x42, 0xa5, 0x6c, 0xb9, 0xb0, 0x74, 0xa2, 0xc2, 0xe3, 0xc0, 0xbc, 0x58, 0x69,
-	0xd7, 0x2a, 0xfe, 0x32, 0xb5, 0x2b, 0x8b, 0x17, 0xe0, 0xb0, 0x49, 0x9e, 0xb9, 0x1b, 0x21, 0xab,
-	0x7c, 0xdf, 0x74, 0x78, 0x3d, 0xb0, 0xfc, 0x10, 0x30, 0xb5, 0x7c, 0x87, 0x34, 0x36, 0x49, 0x33,
-	0xad, 0x4f, 0xe7, 0x61, 0x32, 0x38, 0x1f, 0x4c, 0xc2, 0xf3, 0xc3, 0x84, 0x3f, 0x48, 0x85, 0x94,
-	0x4f, 0xe1, 0xa8, 0xa0, 0x99, 0xef, 0x68, 0x19, 0xfe, 0xd7, 0xf0, 0x86, 0x06, 0xef, 0xc7, 0x97,
-	0xa4, 0x94, 0xb7, 0x48, 0xe0, 0x9e, 0x51, 0x29, 0x33, 0x09, 0x94, 0xaf, 0x10, 0xcc, 0x7c, 0xdc,
-	0x24, 0x9a, 0x4b, 0x86, 0xd4, 0x3e, 0x07, 0x79, 0x62, 0x3f, 0x21, 0x0d, 0xd2, 0xd4, 0x0c, 0xb6,
-	0xff, 0x71, 0xb5, 0x3b, 0x80, 0x2f, 0xc0, 0xb8, 0x6f, 0x46, 0x2a, 0x97, 0x50, 0xff, 0x6d, 0x06,
-	0xa2, 0xca, 0xef, 0x08, 0x66, 0xee, 0xdb, 0x5b, 0xc3, 0xd3, 0xc4, 0xf6, 0x9a, 0x8d, 0xef, 0xf5,
-	0xdd, 0x20, 0x7f, 0x09, 0x33, 0x37, 0x88, 0x41, 0x0e, 0x4e, 0x9c, 0x14, 0x9d, 0x2f, 0xe0, 0xc8,
-	0x5a, 0xcb, 0xd8, 0xf1, 0x0d, 0xa4, 0x4d, 0x78, 0x41, 0xb1, 0x23, 0x95, 0x59, 0xea, 0x4e, 0x86,
-	0x35, 0x3b, 0xca, 0x34, 0xe0, 0xb0, 0x6a, 0xef, 0x74, 0x2a, 0x3b, 0x9e, 0x41, 0x3f, 0x06, 0xa9,
-	0x0c, 0x0a, 0x39, 0x5a, 0x4e, 0x9f, 0xa3, 0xca, 0x1d, 0x0f, 0x21, 0x08, 0x78, 0x42, 0xca, 0xe7,
-	0x86, 0x50, 0xf7, 0x27, 0x82, 0x23, 0xeb, 0x2d, 0xc3, 0x18, 0x0a, 0x7e, 0x1a, 0x72, 0x3b, 0xba,
-	0xb9, 0xe5, 0x3b, 0xc9, 0xfb, 0xc0, 0xd7, 0x21, 0xf7, 0xd8, 0xd0, 0xb6, 0x1d, 0xe9, 0x1a, 0xb3,
-	0x7f, 0xb6, 0x12, 0x5c, 0xfd, 0x95, 0x98, 0x85, 0xca, 0x27, 0x54, 0xf2, 0xa6, 0xe9, 0x36, 0x3b,
-	0xaa, 0xb7, 0x4a, 0xbe, 0x04, 0xd0, 0x1d, 0xc4, 0x45, 0xc8, 0xee, 0x90, 0x0e, 0x37, 0x4d, 0x7f,
-	0x52, 0xa3, 0x6d, 0xcd, 0x68, 0xf9, 0x31, 0xf7, 0x3e, 0xae, 0x64, 0x2e, 0x21, 0xa5, 0x03, 0x38,
-	0x6c, 0xe0, 0x80, 0x2e, 0xc1, 0x8b, 0x30, 0xe6, 0x15, 0x20, 0x69, 0x8c, 0x9d, 0x68, 0x5c, 0xf1,
-	0x4a, 0x53, 0xa5, 0x69, 0xd7, 0x2b, 0x77, 0xd9, 0x8c, 0xca, 0x25, 0x94, 0x55, 0x38, 0xba, 0x6a,
-	0xdb, 0x46, 0x27, 0x62, 0xbb, 0xab, 0x02, 0x0d, 0x54, 0xf1, 0x14, 0x8e, 0xde, 0x22, 0xee, 0x0d,
-	0x52, 0xd7, 0x1d, 0xdd, 0x32, 0x47, 0x51, 0x81, 0x2b, 0x30, 0x56, 0x37, 0x34, 0xbd, 0xe1, 0x48,
-	0xc0, 0xf6, 0x79, 0x2c, 0xb6, 0xcf, 0x9b, 0x6d, 0x62, 0xba, 0x2a, 0x97, 0x52, 0xfe, 0x40, 0x30,
-	0x1b, 0x2e, 0x1d, 0xeb, 0x96, 0xa1, 0xd7, 0xf5, 0xd4, 0xd5, 0x31, 0xb9, 0xbc, 0xc5, 0x6b, 0x66,
-	0x2e, 0xa9, 0x66, 0x1e, 0xa4, 0xe2, 0xed, 0xc1, 0x5c, 0x32, 0x36, 0xf7, 0xd9, 0x05, 0x18, 0xb7,
-	0xf9, 0x58, 0xb4, 0x4e, 0x84, 0x62, 0xcd, 0x96, 0x75, 0xd4, 0x40, 0x34, 0xa9, 0xec, 0xe5, 0x92,
-	0xca, 0xde, 0x23, 0x90, 0x42, 0x05, 0x85, 0xab, 0x49, 0xe7, 0xb2, 0x53, 0x50, 0x60, 0xe6, 0x3a,
-	0xe1, 0x6b, 0x0b, 0xbc, 0x21, 0x76, 0x69, 0x59, 0x30, 0x2b, 0x56, 0x94, 0xa1, 0xd4, 0xd7, 0x60,
-	0xcc, 0xd3, 0x15, 0xbd, 0x84, 0xe3, 0xdb, 0xe6, 0x82, 0xca, 0x4f, 0x08, 0x66, 0xc5, 0xaa, 0x71,
-	0x90, 0x0d, 0x65, 0xa3, 0x1b, 0x1a, 0x05, 0xe9, 0x6b, 0x98, 0x15, 0xab, 0xc2, 0xdb, 0x75, 0xf1,
-	0x4b, 0x04, 0x27, 0xee, 0x11, 0x67, 0xb4, 0x00, 0x26, 0x35, 0x6f, 0xe1, 0xe3, 0x56, 0x4e, 0x7d,
-	0xdc, 0x94, 0xfb, 0x20, 0x27, 0x61, 0x1c, 0xb0, 0x79, 0x53, 0x1e, 0xc3, 0x94, 0xa8, 0x12, 0x9f,
-	0x83, 0x43, 0x0d, 0xe2, 0x6a, 0x8c, 0xb9, 0xb0, 0x34, 0x13, 0xd3, 0x72, 0x87, 0xb8, 0x9a, 0xca,
-	0x44, 0xa8, 0xe8, 0xa6, 0xe6, 0x10, 0xe9, 0xb0, 0x28, 0x4a, 0xaf, 0x6e, 0xa6, 0x6b, 0x4d, 0x73,
-	0x88, 0xca, 0x44, 0x94, 0x5d, 0x90, 0x68, 0x12, 0xd2, 0x1b, 0x37, 0x96, 0x80, 0x2b, 0xb1, 0x04,
-	0x9c, 0x4d, 0xac, 0x02, 0x23, 0xa7, 0x60, 0x03, 0x8e, 0x7b, 0x69, 0x12, 0x98, 0x4f, 0x1b, 0xc0,
-	0xe5, 0xc8, 0x79, 0xec, 0x0b, 0xe6, 0x9f, 0xc8, 0x1f, 0x10, 0x1c, 0xe7, 0x13, 0xc3, 0xda, 0x1b,
-	0x98, 0x20, 0x23, 0x01, 0xed, 0x67, 0xa0, 0x18, 0x9d, 0x7c, 0x37, 0x71, 0xc6, 0x32, 0x8c, 0x3b,
-	0xf5, 0x27, 0x64, 0xab, 0x65, 0x10, 0x69, 0x9a, 0xd1, 0x07, 0xdf, 0x3d, 0x1a, 0x80, 0x6b, 0x62,
-	0x03, 0xb0, 0xd0, 0x67, 0x43, 0x6f, 0xb3, 0xfe, 0x2f, 0xbd, 0x3c, 0x06, 0x05, 0xff, 0xe8, 0xaf,
-	0xae, 0xdf, 0xc6, 0x7b, 0x30, 0x29, 0x3c, 0x8c, 0xf0, 0xa9, 0x10, 0x49, 0xd2, 0x73, 0x50, 0x2e,
-	0xf5, 0x16, 0xe0, 0x3d, 0xde, 0xb9, 0x17, 0x7f, 0xff, 0xfb, 0x26, 0x33, 0x8f, 0xdf, 0xa3, 0xcf,
-	0x4c, 0x16, 0x65, 0xa7, 0xba, 0xdb, 0x8d, 0xff, 0x5e, 0xf7, 0xe9, 0x89, 0x7f, 0x44, 0x50, 0x08,
-	0x3d, 0x62, 0xf0, 0xc9, 0x88, 0x72, 0xf1, 0xd9, 0x24, 0xff, 0xbf, 0xd7, 0x34, 0xb7, 0xbc, 0xca,
-	0x2c, 0x5f, 0xc5, 0x97, 0x07, 0x5a, 0xae, 0xee, 0x0a, 0x3d, 0xec, 0x5e, 0x95, 0xbf, 0x84, 0xf0,
-	0x0b, 0x04, 0x85, 0x50, 0xe5, 0x12, 0x88, 0xe2, 0x4f, 0x24, 0xb9, 0xf7, 0x7d, 0xa3, 0x5c, 0x66,
-	0x30, 0xcb, 0xb8, 0x36, 0x34, 0x0c, 0xde, 0x85, 0x29, 0xb1, 0xc2, 0xe1, 0xb0, 0xd7, 0x13, 0x9f,
-	0x53, 0xfd, 0x48, 0xce, 0x33, 0x92, 0x05, 0x65, 0x70, 0x40, 0xae, 0xa0, 0x45, 0xfc, 0x0a, 0xc1,
-	0x94, 0x58, 0xed, 0x04, 0xeb, 0x89, 0xcf, 0xa7, 0x7e, 0xd6, 0xaf, 0x31, 0xeb, 0x17, 0xe5, 0xe1,
-	0xfd, 0x40, 0x69, 0xbe, 0x47, 0x30, 0x25, 0x56, 0x3a, 0x81, 0x26, 0xf1, 0x69, 0x94, 0x22, 0x2a,
-	0x8b, 0x23, 0x44, 0xe5, 0x05, 0x02, 0xe8, 0x3e, 0x69, 0xf0, 0x5c, 0x08, 0x23, 0xf6, 0x88, 0x92,
-	0x4f, 0xf6, 0x98, 0xe5, 0x27, 0x75, 0x85, 0x61, 0xd4, 0x94, 0xf3, 0x83, 0x43, 0xb2, 0x19, 0xac,
-	0xa6, 0xfe, 0xf0, 0x21, 0xbc, 0x30, 0xc4, 0x20, 0x84, 0x97, 0x43, 0x0c, 0x42, 0x6c, 0xbd, 0x7d,
-	0x08, 0x39, 0x25, 0x84, 0xb7, 0xda, 0x87, 0xe8, 0x5e, 0x53, 0x02, 0x44, 0xec, 0xf9, 0x22, 0x40,
-	0xc4, 0xdf, 0x1e, 0xc3, 0x40, 0xd8, 0xc1, 0x6a, 0x0a, 0xf1, 0x33, 0x82, 0x09, 0x56, 0x5d, 0x83,
-	0xc2, 0xd8, 0xe3, 0x66, 0x8a, 0xb4, 0xec, 0xf2, 0xd9, 0x81, 0x72, 0x1c, 0xed, 0x03, 0x86, 0xb6,
-	0x88, 0xcb, 0x83, 0xd0, 0x02, 0x84, 0x57, 0x08, 0xf2, 0xb7, 0x88, 0xcb, 0x8b, 0xcd, 0x7c, 0xf2,
-	0xdd, 0x21, 0xd4, 0x46, 0xb9, 0x77, 0x1f, 0xa4, 0x7c, 0xc4, 0xec, 0x5f, 0xc2, 0x17, 0xd3, 0xda,
-	0xaf, 0xee, 0x86, 0xea, 0xe8, 0x1e, 0xfe, 0x0e, 0xc1, 0x04, 0x6f, 0x01, 0x3c, 0xa0, 0x85, 0x9e,
-	0xb7, 0x48, 0x6a, 0xa6, 0x65, 0xc6, 0xf4, 0xbe, 0x92, 0xda, 0x27, 0x34, 0x54, 0xbf, 0x20, 0x98,
-	0x10, 0xca, 0xf0, 0x42, 0xcf, 0x0b, 0x25, 0x35, 0x08, 0xbf, 0xeb, 0xe5, 0x11, 0x9d, 0xe3, 0x9f,
-	0x20, 0x2f, 0xb3, 0x12, 0xb0, 0xfa, 0xb4, 0xd7, 0x29, 0x62, 0xb6, 0x38, 0x6a, 0xcc, 0xf6, 0x11,
-	0x00, 0x6d, 0x79, 0x39, 0xd1, 0xe9, 0x90, 0xa5, 0x9e, 0x0d, 0xb9, 0x7c, 0x66, 0x80, 0xd4, 0xf0,
-	0x97, 0x8e, 0x1b, 0x20, 0x50, 0x47, 0xbd, 0x46, 0x50, 0x8c, 0x36, 0xb2, 0xa9, 0xd3, 0x6d, 0x3e,
-	0x22, 0x97, 0xd4, 0x0d, 0xfb, 0x25, 0x0a, 0x9f, 0xee, 0x85, 0x66, 0x87, 0x4d, 0xbf, 0x46, 0x30,
-	0x49, 0xd3, 0x2c, 0x68, 0x34, 0xd3, 0xa5, 0x5a, 0xbf, 0xb6, 0x51, 0xb9, 0xc2, 0x08, 0x3e, 0xc4,
-	0x4b, 0x69, 0x08, 0x22, 0x41, 0xfb, 0x16, 0x41, 0x31, 0xda, 0x6b, 0x63, 0x25, 0x96, 0x6c, 0xb1,
-	0xc6, 0xb8, 0x3f, 0x51, 0x95, 0x11, 0x9d, 0x53, 0x52, 0xf9, 0x84, 0x86, 0x69, 0x1f, 0x41, 0x31,
-	0xda, 0x82, 0x0b, 0x18, 0x3d, 0xfa, 0xf3, 0xfe, 0x18, 0xd7, 0x19, 0xc6, 0x8a, 0x3c, 0x82, 0x63,
-	0x28, 0xd4, 0x1b, 0x04, 0x45, 0x9e, 0x64, 0x5d, 0xa8, 0xb4, 0x89, 0x96, 0x26, 0x62, 0x8b, 0x23,
-	0x80, 0xad, 0xdd, 0x87, 0xc9, 0xba, 0xd5, 0xe8, 0x6a, 0x5f, 0x2b, 0x06, 0x5d, 0xb1, 0xad, 0xaf,
-	0x37, 0x2d, 0xd7, 0x5a, 0x47, 0x8f, 0x70, 0xf0, 0x6f, 0xc9, 0x55, 0xef, 0x57, 0xbb, 0xf6, 0x6b,
-	0x26, 0x7b, 0xfb, 0xe1, 0xc3, 0xdf, 0x32, 0xf9, 0xdb, 0xde, 0xca, 0x07, 0xb5, 0xbf, 0xfc, 0xdf,
-	0x5f, 0x3d, 0xa8, 0x6d, 0x8e, 0xb1, 0xff, 0x52, 0x96, 0xff, 0x0b, 0x00, 0x00, 0xff, 0xff, 0xd4,
-	0xb6, 0xe8, 0xe6, 0xe9, 0x19, 0x00, 0x00,
+	// 1710 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x59, 0x4b, 0x6f, 0xdb, 0xc6,
+	0x16, 0xc6, 0xd8, 0x96, 0xaf, 0x75, 0xfc, 0x88, 0x33, 0xb1, 0x63, 0x86, 0x76, 0xae, 0x75, 0xe9,
+	0x3c, 0x14, 0x23, 0x91, 0xae, 0xec, 0x9b, 0x97, 0x93, 0x5c, 0xc0, 0x4e, 0xd2, 0x20, 0x45, 0x53,
+	0x18, 0x74, 0x12, 0xa4, 0x69, 0x0b, 0x83, 0x96, 0x27, 0x36, 0x61, 0x8a, 0x64, 0x44, 0x4a, 0x8d,
+	0x63, 0xb8, 0x8b, 0x00, 0x6d, 0x03, 0xa4, 0xef, 0x76, 0xd1, 0x75, 0x97, 0x5d, 0x75, 0xd3, 0xee,
+	0xdb, 0x65, 0xb7, 0xdd, 0x14, 0x5d, 0xf7, 0x87, 0x14, 0x1c, 0x0e, 0x1f, 0xc3, 0x87, 0x44, 0x49,
+	0x76, 0xba, 0x30, 0x20, 0x0e, 0x0f, 0xcf, 0xf7, 0x9d, 0xd7, 0x9c, 0x39, 0x63, 0x98, 0x51, 0xf5,
+	0x4d, 0xa2, 0xdb, 0xe5, 0x66, 0xa5, 0x5c, 0x27, 0x96, 0xd1, 0xa8, 0x57, 0xc9, 0xba, 0x62, 0xaa,
+	0x25, 0xb3, 0x6e, 0xd8, 0x06, 0xce, 0xbb, 0x6f, 0x4b, 0xcd, 0x8a, 0x38, 0xb3, 0x65, 0x18, 0x5b,
+	0x1a, 0x29, 0x2b, 0xa6, 0x5a, 0x56, 0x74, 0xdd, 0xb0, 0x15, 0x5b, 0x35, 0x74, 0xcb, 0x15, 0x14,
+	0xa7, 0xd8, 0xdb, 0xba, 0x59, 0x2d, 0x5b, 0xb6, 0x62, 0x37, 0xbc, 0x17, 0x13, 0x4c, 0xbf, 0x66,
+	0x6c, 0x39, 0x7f, 0x6c, 0x75, 0x96, 0xad, 0x2a, 0x8d, 0x4d, 0x95, 0xc3, 0xf6, 0x3e, 0x3b, 0x11,
+	0xa7, 0xc5, 0x5e, 0x49, 0x7f, 0x22, 0x98, 0x78, 0x4b, 0xb5, 0x6c, 0xd9, 0x5b, 0x97, 0xc9, 0xd3,
+	0x06, 0xb1, 0x6c, 0x7c, 0x12, 0xc0, 0x32, 0x95, 0x2a, 0x59, 0xd7, 0x95, 0x1a, 0x11, 0x50, 0x01,
+	0x15, 0xf3, 0x72, 0x9e, 0xae, 0xbc, 0xad, 0xd4, 0x08, 0x3e, 0x0d, 0x63, 0x9a, 0xb2, 0x41, 0xb4,
+	0x75, 0x8b, 0x68, 0xa4, 0x6a, 0x1b, 0x75, 0xa1, 0x8f, 0x8a, 0x8c, 0xd2, 0xd5, 0x35, 0xb6, 0x88,
+	0x8f, 0xc3, 0xa0, 0xa6, 0xd8, 0xc4, 0xb2, 0x85, 0xfe, 0x02, 0x2a, 0x0e, 0xc9, 0xec, 0x09, 0x4f,
+	0x40, 0x4e, 0xa9, 0x19, 0xfa, 0x96, 0x30, 0x50, 0xe8, 0x2f, 0xe6, 0x65, 0xf7, 0x01, 0x63, 0x18,
+	0x68, 0xaa, 0xe4, 0x03, 0x21, 0x47, 0x55, 0xd1, 0xdf, 0x78, 0x1a, 0xf2, 0xa6, 0xb2, 0x45, 0xd6,
+	0x2d, 0xf5, 0x39, 0x11, 0xa0, 0x80, 0x8a, 0x39, 0x79, 0xc8, 0x59, 0x58, 0x53, 0x9f, 0x13, 0x87,
+	0x24, 0x7d, 0x69, 0x1b, 0x3b, 0x44, 0x17, 0x86, 0x5d, 0x92, 0xce, 0xca, 0x7d, 0x67, 0x41, 0x7a,
+	0x06, 0x93, 0x11, 0xdb, 0x2c, 0xd3, 0xd0, 0x2d, 0x82, 0x2f, 0x43, 0xde, 0x77, 0x84, 0x80, 0x0a,
+	0xfd, 0xc5, 0xe1, 0x85, 0x13, 0x25, 0x16, 0x1d, 0xea, 0xc5, 0x52, 0xb3, 0x52, 0xf2, 0x3e, 0x93,
+	0x03, 0x59, 0x7c, 0x06, 0x8e, 0xe8, 0xe4, 0x99, 0xbd, 0x1e, 0x42, 0x65, 0x76, 0x3b, 0xcb, 0xab,
+	0x3e, 0xf2, 0x23, 0xc0, 0x0e, 0xf2, 0x3d, 0x52, 0xdb, 0x20, 0xf5, 0xac, 0x3e, 0x9d, 0x83, 0x51,
+	0x3f, 0x6b, 0xa8, 0x84, 0xeb, 0x87, 0x11, 0x6f, 0xd1, 0x11, 0x92, 0xde, 0x84, 0x63, 0x9c, 0x66,
+	0x66, 0xd1, 0x22, 0xfc, 0xab, 0xe6, 0x2e, 0xb5, 0xb7, 0xc7, 0x93, 0x74, 0x58, 0xde, 0x21, 0xbe,
+	0x7b, 0xba, 0x65, 0xd9, 0x97, 0xc0, 0xf2, 0x15, 0x82, 0xc9, 0x9b, 0x75, 0xa2, 0xd8, 0xa4, 0x43,
+	0xed, 0x33, 0x90, 0x27, 0xe6, 0x36, 0xa9, 0x91, 0xba, 0xa2, 0x51, 0xfb, 0x87, 0xe4, 0x60, 0x01,
+	0x5f, 0x84, 0x21, 0x0f, 0x46, 0x28, 0x16, 0x50, 0x6b, 0x33, 0x7d, 0x51, 0xe9, 0x47, 0x04, 0x93,
+	0x0f, 0xcc, 0xcd, 0xce, 0xd9, 0xc4, 0x6c, 0xed, 0x8f, 0xdb, 0x7a, 0x38, 0x94, 0xdf, 0x85, 0xc9,
+	0x5b, 0x44, 0x23, 0xbd, 0x33, 0x4e, 0x8a, 0xce, 0x3b, 0x70, 0x74, 0xa5, 0xa1, 0xed, 0x78, 0x00,
+	0x59, 0x0b, 0x9e, 0x53, 0x6c, 0x09, 0x45, 0x5a, 0xba, 0xa3, 0x61, 0xcd, 0x96, 0x34, 0x01, 0x38,
+	0xac, 0xda, 0xcd, 0x4e, 0x69, 0xc7, 0x05, 0xf4, 0x62, 0x90, 0x09, 0x90, 0xab, 0xd1, 0x62, 0xf6,
+	0x1a, 0x95, 0xee, 0xb9, 0x14, 0xfc, 0x80, 0x27, 0x94, 0x7c, 0xae, 0x03, 0x75, 0xbf, 0x20, 0x38,
+	0xba, 0xda, 0xd0, 0xb4, 0x8e, 0xc8, 0x4f, 0x40, 0x6e, 0x47, 0xd5, 0x37, 0x3d, 0x27, 0xb9, 0x0f,
+	0xf8, 0x06, 0xe4, 0x9e, 0x68, 0xca, 0x96, 0x25, 0x5c, 0xa7, 0xf8, 0x67, 0x4b, 0x7e, 0x43, 0x28,
+	0xc5, 0x10, 0x4a, 0x6f, 0x38, 0x92, 0xb7, 0x75, 0xbb, 0xbe, 0x2b, 0xbb, 0x5f, 0x89, 0x57, 0x00,
+	0x82, 0x45, 0x3c, 0x0e, 0xfd, 0x3b, 0x64, 0x97, 0x41, 0x3b, 0x3f, 0x1d, 0xd0, 0xa6, 0xa2, 0x35,
+	0xbc, 0x98, 0xbb, 0x0f, 0x4b, 0x7d, 0x57, 0x90, 0xb4, 0x0b, 0x38, 0x0c, 0xd0, 0xa3, 0x4b, 0xf0,
+	0x3c, 0x0c, 0xba, 0x6d, 0x49, 0x18, 0xa4, 0x19, 0x8d, 0x4b, 0x6e, 0xc3, 0x2a, 0xd5, 0xcd, 0x6a,
+	0x69, 0x8d, 0xbe, 0x91, 0x99, 0x04, 0x73, 0x9f, 0xb5, 0x7d, 0xd8, 0xee, 0x8b, 0x20, 0x1c, 0xbc,
+	0xfb, 0x02, 0x80, 0xd7, 0xe9, 0xbe, 0x65, 0x38, 0xb6, 0x6c, 0x9a, 0xda, 0x6e, 0x04, 0x3b, 0x50,
+	0x81, 0xda, 0xaa, 0x78, 0x0a, 0xc7, 0xee, 0x10, 0xfb, 0x16, 0xa9, 0xaa, 0x96, 0x6a, 0xe8, 0xdd,
+	0xa8, 0xc0, 0x25, 0x18, 0xac, 0x6a, 0x8a, 0x5a, 0xb3, 0x04, 0xa0, 0x76, 0x1e, 0x8f, 0xd9, 0x79,
+	0xbb, 0x49, 0x74, 0x5b, 0x66, 0x52, 0xd2, 0x4f, 0x08, 0xa6, 0xc3, 0x9d, 0x77, 0xd5, 0xd0, 0xd4,
+	0xaa, 0x9a, 0xf9, 0x70, 0x91, 0x7c, 0x3a, 0x88, 0x1f, 0x39, 0x72, 0x49, 0x47, 0x8e, 0x5e, 0x0e,
+	0x0c, 0xfb, 0x30, 0x93, 0x4c, 0x9b, 0xf9, 0xec, 0x22, 0x0c, 0x99, 0x6c, 0x2d, 0xda, 0x66, 0x43,
+	0xb1, 0xa6, 0x9f, 0xed, 0xca, 0xbe, 0x68, 0xd2, 0xa9, 0x21, 0x97, 0x74, 0x6a, 0x78, 0x0c, 0x42,
+	0xa8, 0x1f, 0x33, 0x35, 0xd9, 0x5c, 0x36, 0x0b, 0xc3, 0x14, 0x6e, 0x37, 0xbc, 0xeb, 0x83, 0xbb,
+	0x44, 0xf7, 0x7c, 0x03, 0xa6, 0xf9, 0x86, 0xdc, 0x91, 0xfa, 0x0a, 0x0c, 0xba, 0xba, 0xa2, 0x3d,
+	0x2c, 0x6e, 0x36, 0x13, 0x94, 0xbe, 0x44, 0x30, 0xcd, 0x37, 0xdd, 0x5e, 0x0c, 0xea, 0x8f, 0x1a,
+	0xd4, 0x0d, 0xa5, 0xf7, 0x61, 0x9a, 0x6f, 0xaa, 0x07, 0xeb, 0xe2, 0x8f, 0x10, 0x9c, 0xb8, 0x4f,
+	0xac, 0xee, 0x02, 0x98, 0x74, 0xf6, 0x0d, 0xa7, 0x5b, 0x31, 0x73, 0xba, 0x49, 0x0f, 0x40, 0x4c,
+	0xa2, 0xd1, 0xe3, 0xd9, 0x57, 0x7a, 0x02, 0x63, 0xbc, 0x4a, 0x7c, 0x0e, 0x06, 0x6a, 0xc4, 0x56,
+	0x28, 0xe7, 0xe1, 0x85, 0xc9, 0x98, 0x96, 0x7b, 0xc4, 0x56, 0x64, 0x2a, 0xe2, 0x88, 0x6e, 0x28,
+	0x16, 0x11, 0x8e, 0xf0, 0xa2, 0xce, 0xd6, 0x4d, 0x75, 0xad, 0x28, 0x16, 0x91, 0xa9, 0x88, 0xd4,
+	0x00, 0xc1, 0x29, 0x42, 0xa7, 0x61, 0xc5, 0x0a, 0xb0, 0x12, 0x2b, 0xc0, 0xb0, 0xaa, 0xb5, 0x5d,
+	0xbd, 0xda, 0x75, 0xf1, 0x6d, 0xc1, 0x94, 0x5b, 0x20, 0x3e, 0x70, 0xd6, 0xd0, 0x5d, 0x88, 0x64,
+	0x62, 0x0a, 0x25, 0x2f, 0x0b, 0x5f, 0x22, 0x98, 0x72, 0x0b, 0xa3, 0x63, 0xa4, 0xb6, 0x45, 0xd1,
+	0x21, 0x95, 0xef, 0xfa, 0x00, 0x82, 0x65, 0x5c, 0xce, 0x10, 0xcf, 0x95, 0x81, 0x3f, 0x7e, 0x9d,
+	0x45, 0x1d, 0x47, 0x15, 0x17, 0x60, 0xc8, 0xaa, 0x6e, 0x93, 0xcd, 0x86, 0x46, 0x84, 0x09, 0x87,
+	0x37, 0x53, 0xe4, 0xaf, 0x62, 0x91, 0x6b, 0xfa, 0xec, 0x35, 0x6b, 0xfd, 0x97, 0xf8, 0xd6, 0x5f,
+	0x48, 0x34, 0xeb, 0x40, 0x7b, 0xbe, 0x9f, 0x85, 0xd6, 0xf6, 0x3f, 0x94, 0x85, 0x0c, 0xf8, 0x35,
+	0x64, 0x61, 0x87, 0x48, 0x07, 0x9d, 0x85, 0x1a, 0x4c, 0xb8, 0x36, 0xdf, 0xdc, 0x56, 0x74, 0x9d,
+	0x68, 0x19, 0x69, 0x84, 0x27, 0xab, 0x5c, 0xf6, 0xc9, 0x6a, 0xca, 0x9b, 0x4c, 0x7d, 0x34, 0x37,
+	0xaa, 0x0b, 0x3f, 0xcf, 0xc0, 0xb0, 0x27, 0xbf, 0xbc, 0x7a, 0x17, 0xef, 0xc3, 0x28, 0x77, 0x7b,
+	0x80, 0x67, 0x43, 0x66, 0x24, 0xdd, 0x99, 0x88, 0x85, 0x74, 0x01, 0x36, 0x08, 0x9d, 0x7b, 0xf1,
+	0xfb, 0x5f, 0xdf, 0xf4, 0xcd, 0xe1, 0xff, 0x94, 0x9b, 0x95, 0x32, 0x35, 0xc5, 0x2a, 0xef, 0x05,
+	0x46, 0xee, 0x07, 0xf7, 0x33, 0xf8, 0x0b, 0x04, 0xc3, 0xa1, 0x49, 0x1f, 0x9f, 0x8c, 0x28, 0xe7,
+	0xef, 0x16, 0xc4, 0x7f, 0xa7, 0xbd, 0x66, 0xc8, 0xcb, 0x14, 0xf9, 0x1a, 0xbe, 0xda, 0x16, 0xb9,
+	0xbc, 0xc7, 0x0d, 0x7a, 0xfb, 0x65, 0x76, 0x5d, 0x80, 0x5f, 0x20, 0x18, 0x0e, 0x9d, 0x4f, 0x38,
+	0x46, 0xf1, 0x7b, 0x04, 0x31, 0x3d, 0x1a, 0xd2, 0x55, 0x4a, 0x66, 0x11, 0x57, 0x3a, 0x26, 0x83,
+	0xf7, 0x60, 0x8c, 0x3f, 0xc7, 0xe0, 0xb0, 0xd7, 0x13, 0xef, 0x1c, 0x5a, 0x31, 0x39, 0x4f, 0x99,
+	0x9c, 0x91, 0xda, 0x07, 0x64, 0x09, 0xcd, 0xe3, 0x57, 0x08, 0xc6, 0xf8, 0x33, 0x0d, 0x87, 0x9e,
+	0x78, 0xc7, 0xd0, 0x0a, 0xfd, 0x3a, 0x45, 0xbf, 0x24, 0x76, 0xee, 0x07, 0x87, 0xcd, 0x4b, 0x04,
+	0x63, 0xfc, 0x79, 0x86, 0x63, 0x93, 0x78, 0x7f, 0x90, 0x21, 0x2a, 0xf3, 0x5d, 0x44, 0xe5, 0x05,
+	0x02, 0x08, 0xe6, 0x7e, 0x3c, 0x13, 0xa2, 0x11, 0xbb, 0x69, 0x10, 0x4f, 0xa6, 0xbc, 0x65, 0x99,
+	0x7a, 0x99, 0xd2, 0xa8, 0x48, 0xe7, 0xdb, 0x87, 0x64, 0xc3, 0xff, 0xda, 0xf1, 0x87, 0x47, 0xc2,
+	0x0d, 0x43, 0x8c, 0x04, 0x37, 0x1f, 0xc6, 0x48, 0xf0, 0x03, 0x96, 0x47, 0x42, 0xcc, 0x48, 0xc2,
+	0xfd, 0xda, 0x23, 0x11, 0xcc, 0xda, 0x1c, 0x89, 0xd8, 0x8c, 0xcf, 0x91, 0x88, 0x0f, 0xe8, 0x9d,
+	0x90, 0x30, 0xfd, 0xaf, 0x1d, 0x12, 0x5f, 0x21, 0x18, 0xa1, 0xdd, 0xcb, 0x6f, 0x3f, 0x29, 0x3b,
+	0x53, 0x64, 0x30, 0x13, 0xcf, 0xb6, 0x95, 0x63, 0xd4, 0xfe, 0x4b, 0xa9, 0xcd, 0xe3, 0x62, 0x3b,
+	0x6a, 0x3e, 0x85, 0x57, 0x08, 0xf2, 0x77, 0x88, 0xcd, 0x8e, 0x1a, 0x73, 0xc9, 0x7b, 0x07, 0xd7,
+	0x87, 0xc4, 0xf4, 0xd3, 0xae, 0xf4, 0x7f, 0x8a, 0x7f, 0x05, 0x5f, 0xca, 0x8a, 0x5f, 0xde, 0x0b,
+	0xf5, 0xac, 0x7d, 0xfc, 0x31, 0x82, 0x11, 0xd6, 0x68, 0x5d, 0x42, 0x67, 0x52, 0x77, 0x91, 0xcc,
+	0x9c, 0x16, 0x29, 0xa7, 0x0b, 0x52, 0x66, 0x9f, 0x38, 0xa1, 0xfa, 0x16, 0xc1, 0x08, 0xeb, 0xc3,
+	0x71, 0x22, 0x2d, 0xe6, 0xa7, 0x56, 0x44, 0xd8, 0x5e, 0x2f, 0x76, 0xe9, 0x1c, 0x2f, 0x83, 0xdc,
+	0xca, 0x4a, 0xa0, 0xd5, 0x62, 0x88, 0xca, 0x10, 0xb3, 0xf9, 0x6e, 0x63, 0xf6, 0x35, 0x02, 0x70,
+	0x06, 0x1b, 0xc6, 0xe8, 0x54, 0x08, 0x29, 0x75, 0xec, 0x12, 0x4f, 0xb7, 0x91, 0xea, 0x7c, 0xd3,
+	0xb1, 0x7d, 0x0a, 0x8e, 0xa3, 0x3e, 0x43, 0x30, 0x1e, 0x1d, 0x57, 0x32, 0x97, 0xdb, 0x5c, 0x44,
+	0x2e, 0x69, 0xe6, 0xf1, 0x5a, 0x14, 0x3e, 0x95, 0x46, 0xcd, 0x0c, 0x43, 0x7f, 0x82, 0x60, 0xd4,
+	0x29, 0x33, 0x7f, 0xb4, 0xc8, 0x56, 0x6a, 0xc9, 0x47, 0x34, 0x69, 0x89, 0x62, 0xff, 0x0f, 0x2f,
+	0x64, 0xc1, 0x8e, 0x84, 0xeb, 0x43, 0x18, 0x8f, 0x0e, 0x54, 0x58, 0x8a, 0x55, 0x59, 0x6c, 0x06,
+	0x4a, 0xa3, 0x52, 0xa6, 0x54, 0xce, 0x49, 0x99, 0xdc, 0xe0, 0x44, 0xe6, 0x53, 0x04, 0xe3, 0xd1,
+	0x39, 0x8b, 0x23, 0x90, 0x32, 0x84, 0xa5, 0x11, 0xb8, 0x41, 0x09, 0x5c, 0x16, 0xbb, 0xf0, 0x85,
+	0x97, 0x28, 0xac, 0xa2, 0x02, 0x3a, 0x59, 0xab, 0xaa, 0x75, 0x78, 0xe6, 0xbb, 0x09, 0x4f, 0x90,
+	0xb8, 0xc1, 0x84, 0xd3, 0x43, 0xe2, 0xc6, 0xc7, 0xa4, 0x2c, 0x89, 0x1b, 0x82, 0xf6, 0x13, 0xd7,
+	0x9b, 0x46, 0x0e, 0x3b, 0x71, 0x03, 0xec, 0xf4, 0xc4, 0xf5, 0xb9, 0x24, 0x25, 0x6e, 0x64, 0x6c,
+	0xea, 0x21, 0x71, 0x03, 0x2a, 0xd1, 0xc4, 0x4d, 0x24, 0x90, 0x32, 0xb7, 0xf5, 0x90, 0xb8, 0x69,
+	0xbe, 0x88, 0x26, 0xae, 0x4f, 0xe7, 0xf0, 0x13, 0x37, 0x35, 0x3c, 0x9f, 0x23, 0x18, 0xe5, 0x26,
+	0x38, 0x6e, 0x30, 0x4b, 0x9a, 0x24, 0xc5, 0x42, 0xba, 0x00, 0xcb, 0x55, 0x46, 0x48, 0x2a, 0xb7,
+	0xdf, 0xff, 0xab, 0x61, 0x05, 0x4b, 0x68, 0x7e, 0xe5, 0x01, 0x8c, 0x56, 0x8d, 0x5a, 0x00, 0xb1,
+	0x32, 0xee, 0x8f, 0x91, 0xa6, 0xba, 0x5a, 0x37, 0x6c, 0x63, 0x15, 0x3d, 0xc6, 0xfe, 0xff, 0xe0,
+	0xaf, 0xb9, 0xbf, 0x9a, 0x95, 0xef, 0xfb, 0xfa, 0xef, 0x3e, 0x7a, 0xf4, 0x43, 0x5f, 0xfe, 0xae,
+	0xfb, 0xe5, 0xc3, 0xca, 0x6f, 0xde, 0xef, 0xf7, 0x1e, 0x56, 0x36, 0x06, 0xe9, 0x7f, 0xe8, 0x17,
+	0xff, 0x0e, 0x00, 0x00, 0xff, 0xff, 0x69, 0x45, 0x30, 0xa0, 0x55, 0x20, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1738,13 +2100,25 @@ type ResourceAPIClient interface {
 	// List the PullUpdatePolicies in the given space.
 	ListPullPolicies(ctx context.Context, in *ListResourcePoliciesRequest, opts ...grpc.CallOption) (*ListPullPoliciesResponse, error)
 	// Retrieve specified PullUpdatePolicy by name and Space.
-	GetPullPolicy(ctx context.Context, in *GetResourcePolicyRequest, opts ...grpc.CallOption) (*PullUpdatePolicy, error)
+	GetPullPolicy(ctx context.Context, in *GetResourcePolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error)
 	// Create a new PullUpdatePolicy within a space.
-	CreatePullPolicy(ctx context.Context, in *CreatePullPolicyRequest, opts ...grpc.CallOption) (*PullUpdatePolicy, error)
+	CreatePullPolicy(ctx context.Context, in *CreatePullPolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error)
 	// Update an existing PullUpdatePolicy.
-	UpdatePullPolicy(ctx context.Context, in *UpdatePullPolicyRequest, opts ...grpc.CallOption) (*PullUpdatePolicy, error)
+	UpdatePullPolicy(ctx context.Context, in *UpdatePullPolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error)
 	// Permanently destroy a PullUpdatePolicy.
-	DeletePullPolicy(ctx context.Context, in *DeleteResourcePolicyRequest, opts ...grpc.CallOption) (*PullUpdatePolicy, error)
+	DeletePullPolicy(ctx context.Context, in *DeleteResourcePolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error)
+	// List the PushUpdatePolicies in the given space.
+	ListPushPolicies(ctx context.Context, in *ListResourcePoliciesRequest, opts ...grpc.CallOption) (*ListPushPoliciesResponse, error)
+	// Retrieve specified PushUpdatePolicy by name and Space.
+	GetPushPolicy(ctx context.Context, in *GetResourcePolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error)
+	// Create a new PushUpdatePolicy within a space.
+	CreatePushPolicy(ctx context.Context, in *CreatePushPolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error)
+	// Update an existing PushUpdatePolicy.
+	UpdatePushPolicy(ctx context.Context, in *UpdatePushPolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error)
+	// Permanently destroy a PushUpdatePolicy.
+	DeletePushPolicy(ctx context.Context, in *DeleteResourcePolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error)
+	// CreateChannel creates a new (Slack) channel Resource.
+	CreateChannel(ctx context.Context, in *CreateChannelRequest, opts ...grpc.CallOption) (*CreateChannelResponse, error)
 }
 
 type resourceAPIClient struct {
@@ -1899,8 +2273,8 @@ func (c *resourceAPIClient) ListPullPolicies(ctx context.Context, in *ListResour
 	return out, nil
 }
 
-func (c *resourceAPIClient) GetPullPolicy(ctx context.Context, in *GetResourcePolicyRequest, opts ...grpc.CallOption) (*PullUpdatePolicy, error) {
-	out := new(PullUpdatePolicy)
+func (c *resourceAPIClient) GetPullPolicy(ctx context.Context, in *GetResourcePolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error) {
+	out := new(SyncPolicy)
 	err := c.cc.Invoke(ctx, "/indent.v1.ResourceAPI/GetPullPolicy", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -1908,8 +2282,8 @@ func (c *resourceAPIClient) GetPullPolicy(ctx context.Context, in *GetResourcePo
 	return out, nil
 }
 
-func (c *resourceAPIClient) CreatePullPolicy(ctx context.Context, in *CreatePullPolicyRequest, opts ...grpc.CallOption) (*PullUpdatePolicy, error) {
-	out := new(PullUpdatePolicy)
+func (c *resourceAPIClient) CreatePullPolicy(ctx context.Context, in *CreatePullPolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error) {
+	out := new(SyncPolicy)
 	err := c.cc.Invoke(ctx, "/indent.v1.ResourceAPI/CreatePullPolicy", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -1917,8 +2291,8 @@ func (c *resourceAPIClient) CreatePullPolicy(ctx context.Context, in *CreatePull
 	return out, nil
 }
 
-func (c *resourceAPIClient) UpdatePullPolicy(ctx context.Context, in *UpdatePullPolicyRequest, opts ...grpc.CallOption) (*PullUpdatePolicy, error) {
-	out := new(PullUpdatePolicy)
+func (c *resourceAPIClient) UpdatePullPolicy(ctx context.Context, in *UpdatePullPolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error) {
+	out := new(SyncPolicy)
 	err := c.cc.Invoke(ctx, "/indent.v1.ResourceAPI/UpdatePullPolicy", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -1926,9 +2300,63 @@ func (c *resourceAPIClient) UpdatePullPolicy(ctx context.Context, in *UpdatePull
 	return out, nil
 }
 
-func (c *resourceAPIClient) DeletePullPolicy(ctx context.Context, in *DeleteResourcePolicyRequest, opts ...grpc.CallOption) (*PullUpdatePolicy, error) {
-	out := new(PullUpdatePolicy)
+func (c *resourceAPIClient) DeletePullPolicy(ctx context.Context, in *DeleteResourcePolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error) {
+	out := new(SyncPolicy)
 	err := c.cc.Invoke(ctx, "/indent.v1.ResourceAPI/DeletePullPolicy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *resourceAPIClient) ListPushPolicies(ctx context.Context, in *ListResourcePoliciesRequest, opts ...grpc.CallOption) (*ListPushPoliciesResponse, error) {
+	out := new(ListPushPoliciesResponse)
+	err := c.cc.Invoke(ctx, "/indent.v1.ResourceAPI/ListPushPolicies", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *resourceAPIClient) GetPushPolicy(ctx context.Context, in *GetResourcePolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error) {
+	out := new(SyncPolicy)
+	err := c.cc.Invoke(ctx, "/indent.v1.ResourceAPI/GetPushPolicy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *resourceAPIClient) CreatePushPolicy(ctx context.Context, in *CreatePushPolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error) {
+	out := new(SyncPolicy)
+	err := c.cc.Invoke(ctx, "/indent.v1.ResourceAPI/CreatePushPolicy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *resourceAPIClient) UpdatePushPolicy(ctx context.Context, in *UpdatePushPolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error) {
+	out := new(SyncPolicy)
+	err := c.cc.Invoke(ctx, "/indent.v1.ResourceAPI/UpdatePushPolicy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *resourceAPIClient) DeletePushPolicy(ctx context.Context, in *DeleteResourcePolicyRequest, opts ...grpc.CallOption) (*SyncPolicy, error) {
+	out := new(SyncPolicy)
+	err := c.cc.Invoke(ctx, "/indent.v1.ResourceAPI/DeletePushPolicy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *resourceAPIClient) CreateChannel(ctx context.Context, in *CreateChannelRequest, opts ...grpc.CallOption) (*CreateChannelResponse, error) {
+	out := new(CreateChannelResponse)
+	err := c.cc.Invoke(ctx, "/indent.v1.ResourceAPI/CreateChannel", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1970,13 +2398,25 @@ type ResourceAPIServer interface {
 	// List the PullUpdatePolicies in the given space.
 	ListPullPolicies(context.Context, *ListResourcePoliciesRequest) (*ListPullPoliciesResponse, error)
 	// Retrieve specified PullUpdatePolicy by name and Space.
-	GetPullPolicy(context.Context, *GetResourcePolicyRequest) (*PullUpdatePolicy, error)
+	GetPullPolicy(context.Context, *GetResourcePolicyRequest) (*SyncPolicy, error)
 	// Create a new PullUpdatePolicy within a space.
-	CreatePullPolicy(context.Context, *CreatePullPolicyRequest) (*PullUpdatePolicy, error)
+	CreatePullPolicy(context.Context, *CreatePullPolicyRequest) (*SyncPolicy, error)
 	// Update an existing PullUpdatePolicy.
-	UpdatePullPolicy(context.Context, *UpdatePullPolicyRequest) (*PullUpdatePolicy, error)
+	UpdatePullPolicy(context.Context, *UpdatePullPolicyRequest) (*SyncPolicy, error)
 	// Permanently destroy a PullUpdatePolicy.
-	DeletePullPolicy(context.Context, *DeleteResourcePolicyRequest) (*PullUpdatePolicy, error)
+	DeletePullPolicy(context.Context, *DeleteResourcePolicyRequest) (*SyncPolicy, error)
+	// List the PushUpdatePolicies in the given space.
+	ListPushPolicies(context.Context, *ListResourcePoliciesRequest) (*ListPushPoliciesResponse, error)
+	// Retrieve specified PushUpdatePolicy by name and Space.
+	GetPushPolicy(context.Context, *GetResourcePolicyRequest) (*SyncPolicy, error)
+	// Create a new PushUpdatePolicy within a space.
+	CreatePushPolicy(context.Context, *CreatePushPolicyRequest) (*SyncPolicy, error)
+	// Update an existing PushUpdatePolicy.
+	UpdatePushPolicy(context.Context, *UpdatePushPolicyRequest) (*SyncPolicy, error)
+	// Permanently destroy a PushUpdatePolicy.
+	DeletePushPolicy(context.Context, *DeleteResourcePolicyRequest) (*SyncPolicy, error)
+	// CreateChannel creates a new (Slack) channel Resource.
+	CreateChannel(context.Context, *CreateChannelRequest) (*CreateChannelResponse, error)
 }
 
 // UnimplementedResourceAPIServer can be embedded to have forward compatible implementations.
@@ -2031,17 +2471,35 @@ func (*UnimplementedResourceAPIServer) TestPolicy(ctx context.Context, req *Test
 func (*UnimplementedResourceAPIServer) ListPullPolicies(ctx context.Context, req *ListResourcePoliciesRequest) (*ListPullPoliciesResponse, error) {
 	return nil, status1.Errorf(codes.Unimplemented, "method ListPullPolicies not implemented")
 }
-func (*UnimplementedResourceAPIServer) GetPullPolicy(ctx context.Context, req *GetResourcePolicyRequest) (*PullUpdatePolicy, error) {
+func (*UnimplementedResourceAPIServer) GetPullPolicy(ctx context.Context, req *GetResourcePolicyRequest) (*SyncPolicy, error) {
 	return nil, status1.Errorf(codes.Unimplemented, "method GetPullPolicy not implemented")
 }
-func (*UnimplementedResourceAPIServer) CreatePullPolicy(ctx context.Context, req *CreatePullPolicyRequest) (*PullUpdatePolicy, error) {
+func (*UnimplementedResourceAPIServer) CreatePullPolicy(ctx context.Context, req *CreatePullPolicyRequest) (*SyncPolicy, error) {
 	return nil, status1.Errorf(codes.Unimplemented, "method CreatePullPolicy not implemented")
 }
-func (*UnimplementedResourceAPIServer) UpdatePullPolicy(ctx context.Context, req *UpdatePullPolicyRequest) (*PullUpdatePolicy, error) {
+func (*UnimplementedResourceAPIServer) UpdatePullPolicy(ctx context.Context, req *UpdatePullPolicyRequest) (*SyncPolicy, error) {
 	return nil, status1.Errorf(codes.Unimplemented, "method UpdatePullPolicy not implemented")
 }
-func (*UnimplementedResourceAPIServer) DeletePullPolicy(ctx context.Context, req *DeleteResourcePolicyRequest) (*PullUpdatePolicy, error) {
+func (*UnimplementedResourceAPIServer) DeletePullPolicy(ctx context.Context, req *DeleteResourcePolicyRequest) (*SyncPolicy, error) {
 	return nil, status1.Errorf(codes.Unimplemented, "method DeletePullPolicy not implemented")
+}
+func (*UnimplementedResourceAPIServer) ListPushPolicies(ctx context.Context, req *ListResourcePoliciesRequest) (*ListPushPoliciesResponse, error) {
+	return nil, status1.Errorf(codes.Unimplemented, "method ListPushPolicies not implemented")
+}
+func (*UnimplementedResourceAPIServer) GetPushPolicy(ctx context.Context, req *GetResourcePolicyRequest) (*SyncPolicy, error) {
+	return nil, status1.Errorf(codes.Unimplemented, "method GetPushPolicy not implemented")
+}
+func (*UnimplementedResourceAPIServer) CreatePushPolicy(ctx context.Context, req *CreatePushPolicyRequest) (*SyncPolicy, error) {
+	return nil, status1.Errorf(codes.Unimplemented, "method CreatePushPolicy not implemented")
+}
+func (*UnimplementedResourceAPIServer) UpdatePushPolicy(ctx context.Context, req *UpdatePushPolicyRequest) (*SyncPolicy, error) {
+	return nil, status1.Errorf(codes.Unimplemented, "method UpdatePushPolicy not implemented")
+}
+func (*UnimplementedResourceAPIServer) DeletePushPolicy(ctx context.Context, req *DeleteResourcePolicyRequest) (*SyncPolicy, error) {
+	return nil, status1.Errorf(codes.Unimplemented, "method DeletePushPolicy not implemented")
+}
+func (*UnimplementedResourceAPIServer) CreateChannel(ctx context.Context, req *CreateChannelRequest) (*CreateChannelResponse, error) {
+	return nil, status1.Errorf(codes.Unimplemented, "method CreateChannel not implemented")
 }
 
 func RegisterResourceAPIServer(s *grpc.Server, srv ResourceAPIServer) {
@@ -2408,6 +2866,114 @@ func _ResourceAPI_DeletePullPolicy_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ResourceAPI_ListPushPolicies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListResourcePoliciesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceAPIServer).ListPushPolicies(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/indent.v1.ResourceAPI/ListPushPolicies",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceAPIServer).ListPushPolicies(ctx, req.(*ListResourcePoliciesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ResourceAPI_GetPushPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetResourcePolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceAPIServer).GetPushPolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/indent.v1.ResourceAPI/GetPushPolicy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceAPIServer).GetPushPolicy(ctx, req.(*GetResourcePolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ResourceAPI_CreatePushPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePushPolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceAPIServer).CreatePushPolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/indent.v1.ResourceAPI/CreatePushPolicy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceAPIServer).CreatePushPolicy(ctx, req.(*CreatePushPolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ResourceAPI_UpdatePushPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePushPolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceAPIServer).UpdatePushPolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/indent.v1.ResourceAPI/UpdatePushPolicy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceAPIServer).UpdatePushPolicy(ctx, req.(*UpdatePushPolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ResourceAPI_DeletePushPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteResourcePolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceAPIServer).DeletePushPolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/indent.v1.ResourceAPI/DeletePushPolicy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceAPIServer).DeletePushPolicy(ctx, req.(*DeleteResourcePolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ResourceAPI_CreateChannel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateChannelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceAPIServer).CreateChannel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/indent.v1.ResourceAPI/CreateChannel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceAPIServer).CreateChannel(ctx, req.(*CreateChannelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ResourceAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "indent.v1.ResourceAPI",
 	HandlerType: (*ResourceAPIServer)(nil),
@@ -2491,6 +3057,30 @@ var _ResourceAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeletePullPolicy",
 			Handler:    _ResourceAPI_DeletePullPolicy_Handler,
+		},
+		{
+			MethodName: "ListPushPolicies",
+			Handler:    _ResourceAPI_ListPushPolicies_Handler,
+		},
+		{
+			MethodName: "GetPushPolicy",
+			Handler:    _ResourceAPI_GetPushPolicy_Handler,
+		},
+		{
+			MethodName: "CreatePushPolicy",
+			Handler:    _ResourceAPI_CreatePushPolicy_Handler,
+		},
+		{
+			MethodName: "UpdatePushPolicy",
+			Handler:    _ResourceAPI_UpdatePushPolicy_Handler,
+		},
+		{
+			MethodName: "DeletePushPolicy",
+			Handler:    _ResourceAPI_DeletePushPolicy_Handler,
+		},
+		{
+			MethodName: "CreateChannel",
+			Handler:    _ResourceAPI_CreateChannel_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
