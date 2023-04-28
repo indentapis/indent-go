@@ -3,14 +3,14 @@ on:
   pull_request:
     paths:
     - "api/**"
-    - "pkg/auditv1/**"
+    - "pkg/**"
     - ".github/**"
   push:
     branches:
     - master
     paths:
     - "api/**"
-    - "pkg/auditv1/**"
+    - "pkg/**"
     - ".github/**"
 jobs:
   build:
