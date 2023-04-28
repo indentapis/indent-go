@@ -24,6 +24,7 @@ var (
 type LoginOptions struct {
 	ListenAddr     string
 	OAuth          *oauth2.Config
+	NoPKCE         bool
 	NoRefreshToken bool
 }
 
@@ -36,16 +37,16 @@ func NewLoginOptions() *LoginOptions {
 }
 
 // Login prompts users to authenticate with a browser.
-func Login(opts *LoginOptions) (code string, err error) {
+func Login(opts *LoginOptions) (code string, verifier *PKCEVerifier, err error) {
 	if opts == nil || opts.OAuth == nil {
-		return "", ErrMissingOAuthConfig
+		return "", nil, ErrMissingOAuthConfig
 	}
 
 	// set redirect URL
 	opts.OAuth.RedirectURL = "http://" + opts.ListenAddr + "/auth"
 
 	// setup handler for specified state
-	state := rand.Str(common.StateLen)
+	state := rand.Hex(common.StateLen)
 	handler, codeChan := newLoginHandler(state)
 
 	// start server
@@ -58,19 +59,31 @@ func Login(opts *LoginOptions) (code string, err error) {
 	}()
 
 	// default to getting a refresh token
-	authCodeOpt := oauth2.AccessTypeOffline
+	optAccessType := oauth2.AccessTypeOffline
 	if opts.NoRefreshToken {
-		authCodeOpt = oauth2.AccessTypeOnline
+		optAccessType = oauth2.AccessTypeOnline
+	}
+
+	// construct auth code options
+	authCodeOpts := []oauth2.AuthCodeOption{
+		optAccessType,
+		oauth2.SetAuthURLParam("prompt", "consent"),
+	}
+
+	// setup PKCE
+	if !opts.NoPKCE {
+		verifier = NewPKCEVerifier()
+		authCodeOpts = append(authCodeOpts, verifier.AuthOpts()...)
 	}
 
 	// print URL and open browser for user to authorize
-	authURL := opts.OAuth.AuthCodeURL(state, authCodeOpt, oauth2.SetAuthURLParam("prompt", "consent"))
+	authURL := opts.OAuth.AuthCodeURL(state, authCodeOpts...)
 	log.Printf("Click link to authorize Indent Command Line: %s", authURL)
 	go openBrowser(authURL)
 
 	// wait to receive code
 	code = <-codeChan
-	return code, err
+	return code, verifier, err
 }
 
 func newLoginHandler(state string) (_ http.Handler, _ chan string) {

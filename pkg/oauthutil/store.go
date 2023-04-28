@@ -74,9 +74,9 @@ func (s *FileStore) Name() string {
 
 // Login authorizes the user and writes their token to the FileStore.
 func (s *FileStore) Login(ctx context.Context, loginOpts *LoginOptions) error {
-	if code, err := Login(loginOpts); err != nil {
+	if code, verifier, err := Login(loginOpts); err != nil {
 		return fmt.Errorf("failed to get new token: %w", err)
-	} else if token, err := loginOpts.OAuth.Exchange(ctx, code); err != nil {
+	} else if token, err := loginOpts.OAuth.Exchange(ctx, code, verifier.TokenOpt()); err != nil {
 		return fmt.Errorf("failed to exchange code for access token: %w", err)
 	} else if err = s.writeToken(&tokenFile{Token: token, OAuth: loginOpts.OAuth}); err != nil {
 		return fmt.Errorf("failed to write token: %w", err)
