@@ -1,17 +1,9 @@
 name: build-clients
 on:
   pull_request:
-    paths:
-    - "api/**"
-    - "pkg/**"
-    - ".github/**"
   push:
     branches:
     - master
-    paths:
-    - "api/**"
-    - "pkg/**"
-    - ".github/**"
 jobs:
   build:
     name: clients.go
