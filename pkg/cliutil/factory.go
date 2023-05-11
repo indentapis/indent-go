@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/golang/protobuf/jsonpb"
+	"github.com/golang/protobuf/proto"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -18,6 +20,11 @@ import (
 	"go.indent.com/indent-go/pkg/fileutil"
 	"go.indent.com/indent-go/pkg/oauthutil"
 	"go.indent.com/indent-go/pkg/petitioncfg"
+)
+
+const (
+	// OutputJSON encodes the output as JSON.
+	OutputJSON = "json"
 )
 
 const (
@@ -45,8 +52,17 @@ type Factory interface {
 	// Store returns a token Store.
 	Store() oauthutil.Store
 
+	// OutputJSON writes the given proto.Message to stdout as JSON.
+	OutputJSON(proto.Message)
+
 	// API returns an APIClient configured to use the Platform API.
 	API(context.Context) APIClient
+
+	// Resources returns all the Resources in the space.
+	Resources(ctx context.Context, view string) *indentv1.ListResourcesResponse
+
+	// SelectResource uses an interactive prompt to select a resource.
+	SelectResource(ctx context.Context, view string) (selected *auditv1.Resource)
 
 	// CurrentUser returns a Resource representing the currently logged-in user.
 	CurrentUser(context.Context) *auditv1.Resource
@@ -79,6 +95,7 @@ type factoryImpl struct {
 	rootCmd *cobra.Command
 	config  *Config
 	store   oauthutil.Store
+	m       jsonpb.Marshaler
 }
 
 func (f *factoryImpl) Setup() {
@@ -122,9 +139,15 @@ func (f *factoryImpl) WriteConfig() {
 
 func (f *factoryImpl) Store() oauthutil.Store {
 	if f.store == nil {
-		f.store = oauthutil.NewStore(credentialDir(f.config.configDir), f.config.Environment.Name)
+		f.store = oauthutil.NewStore(f.rootCmd.Context(), f.config.Headless, credentialDir(f.config.configDir), f.config.Environment.Name)
 	}
 	return f.store
+}
+
+func (f *factoryImpl) OutputJSON(msg proto.Message) {
+	if err := f.m.Marshal(f.rootCmd.OutOrStdout(), msg); err != nil {
+		f.Logger().Fatal("Failed to encode as JSON", zap.Error(err))
+	}
 }
 
 func (f *factoryImpl) API(ctx context.Context) APIClient {
@@ -136,10 +159,39 @@ func (f *factoryImpl) API(ctx context.Context) APIClient {
 	return client
 }
 
+func (f *factoryImpl) Resources(ctx context.Context, view string) *indentv1.ListResourcesResponse {
+	logger := f.Logger()
+	client := f.API(ctx).Resources()
+
+	resp, err := client.ListResources(ctx, &indentv1.ListResourcesRequest{
+		SpaceName: f.Config().Space,
+		View:      view,
+	})
+	if err != nil {
+		logger.Fatal("Failed to list Resources", zap.Error(err))
+	}
+	return resp
+}
+
+// SelectResource provides an interactive prompt for selecting resources.
+func (f *factoryImpl) SelectResource(ctx context.Context, view string) (selected *auditv1.Resource) {
+	logger := f.Logger()
+	resources := f.Resources(ctx, view)
+	if s, err := NewSelect(resources.GetResources()); err != nil {
+		logger.Fatal("Failed to create select", zap.Error(err))
+	} else if selected, err = s.Run(); err != nil {
+		logger.Fatal("Failed to run select", zap.Error(err))
+	}
+	logger.Debug("Selected", zap.Object("resource", selected))
+	return selected
+}
+
 func (f *factoryImpl) CurrentUser(ctx context.Context) (user *auditv1.Resource) {
 	logger := f.Logger()
-	claims, err := f.Store().Claims()
-	if err != nil {
+	store := f.Store()
+	if err := store.UpdateUserInfo(); err != nil {
+		logger.Fatal("Failed to update user info", zap.Error(err))
+	} else if claims, err := store.Claims(); err != nil {
 		logger.Fatal("Failed to determine current user", zap.Error(err))
 	} else if user, err = claims.Resource(); err != nil {
 		logger.Fatal("Failed loading resource from claims", zap.Error(err))

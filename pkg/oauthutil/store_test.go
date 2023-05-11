@@ -29,7 +29,7 @@ func TestStoreNew(t *testing.T) {
 	claims, err := store.Claims()
 	assert.Nil(t, claims)
 	assert.Error(t, err)
-	err = store.UpdateUserInfo(context.Background())
+	err = store.UpdateUserInfo()
 	assert.Error(t, err)
 }
 
@@ -38,7 +38,7 @@ func TestStoreLoginFail(t *testing.T) {
 	defer cleanupStore(t, store)
 
 	loginOpts := NewLoginOptions()
-	assert.Error(t, store.Login(context.Background(), loginOpts))
+	assert.Error(t, store.Login(loginOpts))
 }
 
 func TestStoreBadConfig(t *testing.T) {
@@ -52,7 +52,7 @@ func TestStoreBadConfig(t *testing.T) {
 	claims, err := store.Claims()
 	assert.Nil(t, claims)
 	assert.NoError(t, err)
-	err = store.UpdateUserInfo(context.Background())
+	err = store.UpdateUserInfo()
 	assert.Error(t, err)
 }
 
@@ -94,7 +94,7 @@ func TestStoreEndpoints(t *testing.T) {
 	}))
 
 	// update userinfo
-	assert.NoError(t, store.UpdateUserInfo(context.Background()))
+	assert.NoError(t, store.UpdateUserInfo())
 
 	// check claims
 	claims, err := store.Claims()
@@ -106,7 +106,8 @@ func newTestStore(t *testing.T, name string) *FileStore {
 	t.Helper()
 	tmpDir, err := os.MkdirTemp("", testStoreName+name)
 	assert.NoError(t, err)
-	store := NewStore(tmpDir, name)
+	ctx := context.Background()
+	store := NewStore(ctx, true, tmpDir, name)
 	store.Directory = tmpDir
 	return store
 }

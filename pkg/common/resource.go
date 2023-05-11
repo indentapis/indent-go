@@ -17,6 +17,9 @@ const (
 
 	// LabelResourceIconURL contains the icon URL associated with Resource.
 	LabelResourceIconURL = ResourcePrefix + "icon"
+
+	// LabelIsDeactivated indicates whether a user Resource has been deactivated
+	LabelIsDeactivated = ResourcePrefix + "is_deactivated"
 )
 
 const (

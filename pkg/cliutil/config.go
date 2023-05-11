@@ -78,6 +78,9 @@ type Config struct {
 	// JSONKeyFile specifies a path to a Google Developers service account
 	// JSON key file. If none, then a standard oauth token is expected.
 	JSONKeyFile string `mapstructure:"JSON_KEY_FILE" yaml:"jsonKeyFile"`
+
+	// Headless specifies that the CLI should not open a browser login window.
+	Headless bool `mapstructure:"HEADLESS" yaml:"headless"`
 }
 
 func (c *Config) refresh(logger *zap.Logger) {
