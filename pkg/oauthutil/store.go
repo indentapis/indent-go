@@ -30,14 +30,16 @@ var _ Store = new(FileStore)
 type Store interface {
 	oauth2.TokenSource
 	Name() string
-	Login(ctx context.Context, loginOpts *LoginOptions) error
+	Login(loginOpts *LoginOptions) error
 	Claims() (*oidcclaims.Claims, error)
-	UpdateUserInfo(ctx context.Context) error
+	UpdateUserInfo() error
 }
 
 // NewStore returns a FileStore with defaults set.
-func NewStore(credentialDir, envName string) *FileStore {
+func NewStore(ctx context.Context, headless bool, credentialDir, envName string) *FileStore {
 	return &FileStore{
+		ctx:       ctx,
+		headless:  headless,
 		Directory: credentialDir,
 		Filename:  envName,
 	}
@@ -45,6 +47,12 @@ func NewStore(credentialDir, envName string) *FileStore {
 
 // FileStore manages credentials locally.
 type FileStore struct {
+	// ctx used to create token source.
+	ctx context.Context
+
+	// headless indicates that the login process should not open a browser.
+	headless bool
+
 	// Directory credentials are stored.
 	Directory string
 
@@ -63,6 +71,19 @@ func (s *FileStore) Token() (*oauth2.Token, error) {
 	t, err := s.readToken()
 	if err != nil {
 		return nil, err
+	} else if !t.Token.Valid() {
+		if s.headless {
+			return nil, fmt.Errorf("token is invalid, expiry %s", t.Token.Expiry)
+		}
+
+		opts := NewLoginOptions()
+		opts.OAuth = t.OAuth
+
+		if err = s.Login(opts); err != nil {
+			return nil, fmt.Errorf("failed to get new refresh token: %w", err)
+		} else if t, err = s.readToken(); err != nil {
+			return nil, fmt.Errorf("failed to read token after successful login: %w", err)
+		}
 	}
 	return t.Token, nil
 }
@@ -73,10 +94,10 @@ func (s *FileStore) Name() string {
 }
 
 // Login authorizes the user and writes their token to the FileStore.
-func (s *FileStore) Login(ctx context.Context, loginOpts *LoginOptions) error {
+func (s *FileStore) Login(loginOpts *LoginOptions) error {
 	if code, verifier, err := Login(loginOpts); err != nil {
 		return fmt.Errorf("failed to get new token: %w", err)
-	} else if token, err := loginOpts.OAuth.Exchange(ctx, code, verifier.TokenOpt()); err != nil {
+	} else if token, err := loginOpts.OAuth.Exchange(s.ctx, code, verifier.TokenOpt()); err != nil {
 		return fmt.Errorf("failed to exchange code for access token: %w", err)
 	} else if err = s.writeToken(&tokenFile{Token: token, OAuth: loginOpts.OAuth}); err != nil {
 		return fmt.Errorf("failed to write token: %w", err)
@@ -94,10 +115,10 @@ func (s *FileStore) Claims() (*oidcclaims.Claims, error) {
 }
 
 // UpdateUserInfo sets data returned by userinfo as claims.
-func (s *FileStore) UpdateUserInfo(ctx context.Context) error {
+func (s *FileStore) UpdateUserInfo() error {
 	if t, err := s.readToken(); err != nil {
 		return fmt.Errorf("failed to get token: %w", err)
-	} else if t.Claims, err = UserInfo(ctx, t.OAuth, t.Token); err != nil {
+	} else if t.Claims, err = UserInfo(s.ctx, t.OAuth, t.Token); err != nil {
 		return fmt.Errorf("failed retrieve UserInfo: %w", err)
 	} else if err = s.writeToken(t); err != nil {
 		return fmt.Errorf("failed to write token: %w", err)

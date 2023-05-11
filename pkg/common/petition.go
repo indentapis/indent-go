@@ -1,6 +1,11 @@
 package common
 
 const (
+	// MinLenReason is the shortest length accepted for a reason
+	MinLenReason = 5
+)
+
+const (
 	// PetitionStateOpen denotes the "open" petition state. See [docs](https://indent.dev/docs/petitions#petition-phases).
 	PetitionStateOpen = "open"
 	// PetitionStateGranted denotes the "granted" petition state. See [docs](https://indent.dev/docs/petitions#petition-phases).
