@@ -79,6 +79,9 @@ type Config struct {
 	// JSON key file. If none, then a standard oauth token is expected.
 	JSONKeyFile string `mapstructure:"JSON_KEY_FILE" yaml:"jsonKeyFile"`
 
+	// Verbose specifies that the logger should include debug messages and additional context.
+	Verbose bool `mapstructure:"VERBOSE" yaml:"verbose"`
+
 	// Headless specifies that the CLI should not open a browser login window.
 	Headless bool `mapstructure:"HEADLESS" yaml:"headless"`
 }
