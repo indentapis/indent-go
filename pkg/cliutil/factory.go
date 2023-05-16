@@ -2,7 +2,6 @@ package cliutil
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -11,7 +10,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"k8s.io/apimachinery/pkg/labels"
 
 	auditv1 "go.indent.com/indent-go/api/indent/audit/v1"
@@ -75,12 +73,7 @@ type Factory interface {
 }
 
 // New returns a new Factory using defaults to authenticate against the Platform API.
-func New(rootCmd *cobra.Command) (Factory, *Config) {
-	logger, err := zap.NewProduction(zap.IncreaseLevel(zapcore.InfoLevel))
-	if err != nil {
-		panic(fmt.Sprintf("failed to setup logger: %v", err))
-	}
-
+func New(logger *zap.Logger, rootCmd *cobra.Command) (Factory, *Config) {
 	config := NewConfig(logger)
 	return &factoryImpl{
 		logger:  logger,
@@ -106,12 +99,16 @@ func (f *factoryImpl) Setup() {
 }
 
 func (f *factoryImpl) Logger() *zap.Logger {
-	logger := f.logger.With(
+	if !f.config.Verbose {
+		return f.logger
+	}
+
+	logger := f.logger.WithOptions(zap.IncreaseLevel(zap.DebugLevel))
+	return logger.With(
 		zap.String("config", viper.ConfigFileUsed()),
 		zap.String("space", f.config.Space),
 		zap.String("environment", f.config.Environment.Name),
 	)
-	return logger
 }
 
 func (f *factoryImpl) Config() *Config {
