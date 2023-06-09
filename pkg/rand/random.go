@@ -11,6 +11,9 @@ import (
 	"github.com/golang/protobuf/ptypes/timestamp"
 )
 
+// bools can be (1) true or (2) false
+const countBoolOptions = 2
+
 // Str generates a randomized string of the specified length.
 func Str(length int) (str string) {
 	chars := "0123456789abcdefghijklmnopqrstuvwxyz"
@@ -38,6 +41,15 @@ func Intn(max int) int {
 		panic(err)
 	}
 	return int(num.Int64())
+}
+
+// Bool returns a bool
+func Bool() bool {
+	num, err := rand.Int(rand.Reader, big.NewInt(int64(countBoolOptions)))
+	if err != nil {
+		panic(err)
+	}
+	return int(num.Int64()) == 1
 }
 
 // Timestamp returns a uniformly random timestamp between (center - variance/2)

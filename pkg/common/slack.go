@@ -48,3 +48,8 @@ const (
 	// LabelSlackHas2FA indicates whether a Slack user has 2FA configured.
 	LabelSlackHas2FA = SlackPrefix + "has_2fa"
 )
+
+const (
+	// SourceSlack is the Source when a Petition is received by Slack.
+	SourceSlack = "Slack"
+)
