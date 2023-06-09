@@ -9,11 +9,14 @@ import (
 	proto "github.com/golang/protobuf/proto"
 	v1 "go.indent.com/indent-go/api/indent/audit/v1"
 	_ "go.indent.com/indent-go/api/indent/log"
+	_ "go.indent.com/indent-go/api/indent/sql"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
-	status "google.golang.org/genproto/googleapis/rpc/status"
+	_ "google.golang.org/genproto/googleapis/rpc/status"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
-	status1 "google.golang.org/grpc/status"
+	status "google.golang.org/grpc/status"
+	_ "google.golang.org/protobuf/types/known/emptypb"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	math "math"
 )
 
@@ -27,37 +30,6 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
-
-type Install_Status int32
-
-const (
-	// NotInstalled indicates the initial setup needs to be completed.
-	Install_NotInstalled Install_Status = 0
-	// Installed indicates the Install has been configured and should be working.
-	Install_Installed Install_Status = 1
-	// ActionRequired indicates the Install needs user attention and may not be working.
-	Install_ActionRequired Install_Status = 2
-)
-
-var Install_Status_name = map[int32]string{
-	0: "NotInstalled",
-	1: "Installed",
-	2: "ActionRequired",
-}
-
-var Install_Status_value = map[string]int32{
-	"NotInstalled":   0,
-	"Installed":      1,
-	"ActionRequired": 2,
-}
-
-func (x Install_Status) String() string {
-	return proto.EnumName(Install_Status_name, int32(x))
-}
-
-func (Install_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{11, 0}
-}
 
 type GroupVersionKind struct {
 	// Group of Kinds being represented.
@@ -215,296 +187,6 @@ func (m *Integration) GetCapabilities() *Capabilities {
 	return nil
 }
 
-type Failure struct {
-	// Meta contains metadata about the Failure.
-	Meta *v1.Meta `protobuf:"bytes,1,opt,name=meta,proto3" json:"meta,omitempty"`
-	// Status is the response status returned from an Integration failure.
-	Status *status.Status `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
-	// RelatedEvents contain all events that occurred leading up to the Failure event.
-	RelatedEvents []*v1.Event `protobuf:"bytes,5,rep,name=related_events,json=relatedEvents,proto3" json:"related_events,omitempty"`
-	// Install that failed.
-	Install              *Install `protobuf:"bytes,7,opt,name=install,proto3" json:"install,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *Failure) Reset()         { *m = Failure{} }
-func (m *Failure) String() string { return proto.CompactTextString(m) }
-func (*Failure) ProtoMessage()    {}
-func (*Failure) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{3}
-}
-
-func (m *Failure) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Failure.Unmarshal(m, b)
-}
-func (m *Failure) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Failure.Marshal(b, m, deterministic)
-}
-func (m *Failure) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Failure.Merge(m, src)
-}
-func (m *Failure) XXX_Size() int {
-	return xxx_messageInfo_Failure.Size(m)
-}
-func (m *Failure) XXX_DiscardUnknown() {
-	xxx_messageInfo_Failure.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Failure proto.InternalMessageInfo
-
-func (m *Failure) GetMeta() *v1.Meta {
-	if m != nil {
-		return m.Meta
-	}
-	return nil
-}
-
-func (m *Failure) GetStatus() *status.Status {
-	if m != nil {
-		return m.Status
-	}
-	return nil
-}
-
-func (m *Failure) GetRelatedEvents() []*v1.Event {
-	if m != nil {
-		return m.RelatedEvents
-	}
-	return nil
-}
-
-func (m *Failure) GetInstall() *Install {
-	if m != nil {
-		return m.Install
-	}
-	return nil
-}
-
-type CreateFailureRequest struct {
-	// Name of space containing Failure.
-	SpaceName string `protobuf:"bytes,1,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
-	// Failure is the event created from an Integration failure.
-	Failure              *Failure `protobuf:"bytes,5,opt,name=failure,proto3" json:"failure,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *CreateFailureRequest) Reset()         { *m = CreateFailureRequest{} }
-func (m *CreateFailureRequest) String() string { return proto.CompactTextString(m) }
-func (*CreateFailureRequest) ProtoMessage()    {}
-func (*CreateFailureRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{4}
-}
-
-func (m *CreateFailureRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_CreateFailureRequest.Unmarshal(m, b)
-}
-func (m *CreateFailureRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_CreateFailureRequest.Marshal(b, m, deterministic)
-}
-func (m *CreateFailureRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateFailureRequest.Merge(m, src)
-}
-func (m *CreateFailureRequest) XXX_Size() int {
-	return xxx_messageInfo_CreateFailureRequest.Size(m)
-}
-func (m *CreateFailureRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_CreateFailureRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CreateFailureRequest proto.InternalMessageInfo
-
-func (m *CreateFailureRequest) GetSpaceName() string {
-	if m != nil {
-		return m.SpaceName
-	}
-	return ""
-}
-
-func (m *CreateFailureRequest) GetFailure() *Failure {
-	if m != nil {
-		return m.Failure
-	}
-	return nil
-}
-
-type GetFailureRequest struct {
-	// Name of space containing Failure.
-	SpaceName string `protobuf:"bytes,1,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
-	// Name of the Failure.
-	FailureName          string   `protobuf:"bytes,5,opt,name=failure_name,json=failureName,proto3" json:"failure_name,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *GetFailureRequest) Reset()         { *m = GetFailureRequest{} }
-func (m *GetFailureRequest) String() string { return proto.CompactTextString(m) }
-func (*GetFailureRequest) ProtoMessage()    {}
-func (*GetFailureRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{5}
-}
-
-func (m *GetFailureRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetFailureRequest.Unmarshal(m, b)
-}
-func (m *GetFailureRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetFailureRequest.Marshal(b, m, deterministic)
-}
-func (m *GetFailureRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetFailureRequest.Merge(m, src)
-}
-func (m *GetFailureRequest) XXX_Size() int {
-	return xxx_messageInfo_GetFailureRequest.Size(m)
-}
-func (m *GetFailureRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetFailureRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GetFailureRequest proto.InternalMessageInfo
-
-func (m *GetFailureRequest) GetSpaceName() string {
-	if m != nil {
-		return m.SpaceName
-	}
-	return ""
-}
-
-func (m *GetFailureRequest) GetFailureName() string {
-	if m != nil {
-		return m.FailureName
-	}
-	return ""
-}
-
-type ListFailuresRequest struct {
-	// Name of space containing Failures.
-	SpaceName string `protobuf:"bytes,1,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
-	// Integration name related to the Failures.
-	IntegrationName string `protobuf:"bytes,3,opt,name=integration_name,json=integrationName,proto3" json:"integration_name,omitempty"`
-	// Install name related to the Failures.
-	InstallName string `protobuf:"bytes,4,opt,name=install_name,json=installName,proto3" json:"install_name,omitempty"`
-	// Max number of Failures to be returned.
-	PageSize int32 `protobuf:"varint,10,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	// Token for current page position for this list of Failures.
-	PageToken            string   `protobuf:"bytes,11,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ListFailuresRequest) Reset()         { *m = ListFailuresRequest{} }
-func (m *ListFailuresRequest) String() string { return proto.CompactTextString(m) }
-func (*ListFailuresRequest) ProtoMessage()    {}
-func (*ListFailuresRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{6}
-}
-
-func (m *ListFailuresRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ListFailuresRequest.Unmarshal(m, b)
-}
-func (m *ListFailuresRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ListFailuresRequest.Marshal(b, m, deterministic)
-}
-func (m *ListFailuresRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListFailuresRequest.Merge(m, src)
-}
-func (m *ListFailuresRequest) XXX_Size() int {
-	return xxx_messageInfo_ListFailuresRequest.Size(m)
-}
-func (m *ListFailuresRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListFailuresRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ListFailuresRequest proto.InternalMessageInfo
-
-func (m *ListFailuresRequest) GetSpaceName() string {
-	if m != nil {
-		return m.SpaceName
-	}
-	return ""
-}
-
-func (m *ListFailuresRequest) GetIntegrationName() string {
-	if m != nil {
-		return m.IntegrationName
-	}
-	return ""
-}
-
-func (m *ListFailuresRequest) GetInstallName() string {
-	if m != nil {
-		return m.InstallName
-	}
-	return ""
-}
-
-func (m *ListFailuresRequest) GetPageSize() int32 {
-	if m != nil {
-		return m.PageSize
-	}
-	return 0
-}
-
-func (m *ListFailuresRequest) GetPageToken() string {
-	if m != nil {
-		return m.PageToken
-	}
-	return ""
-}
-
-type ListFailuresResponse struct {
-	// Paginated list of sanitized Failures in a Space.
-	Failures []*Failure `protobuf:"bytes,1,rep,name=failures,proto3" json:"failures,omitempty"`
-	// Page cursor for list of Failures.
-	NextPageToken        string   `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ListFailuresResponse) Reset()         { *m = ListFailuresResponse{} }
-func (m *ListFailuresResponse) String() string { return proto.CompactTextString(m) }
-func (*ListFailuresResponse) ProtoMessage()    {}
-func (*ListFailuresResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{7}
-}
-
-func (m *ListFailuresResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ListFailuresResponse.Unmarshal(m, b)
-}
-func (m *ListFailuresResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ListFailuresResponse.Marshal(b, m, deterministic)
-}
-func (m *ListFailuresResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListFailuresResponse.Merge(m, src)
-}
-func (m *ListFailuresResponse) XXX_Size() int {
-	return xxx_messageInfo_ListFailuresResponse.Size(m)
-}
-func (m *ListFailuresResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListFailuresResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ListFailuresResponse proto.InternalMessageInfo
-
-func (m *ListFailuresResponse) GetFailures() []*Failure {
-	if m != nil {
-		return m.Failures
-	}
-	return nil
-}
-
-func (m *ListFailuresResponse) GetNextPageToken() string {
-	if m != nil {
-		return m.NextPageToken
-	}
-	return ""
-}
-
 type ListIntegrationsRequest struct {
 	// Name of space containing Integration.
 	SpaceName string `protobuf:"bytes,1,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
@@ -527,7 +209,7 @@ func (m *ListIntegrationsRequest) Reset()         { *m = ListIntegrationsRequest
 func (m *ListIntegrationsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListIntegrationsRequest) ProtoMessage()    {}
 func (*ListIntegrationsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{8}
+	return fileDescriptor_d466beb30e81ebe2, []int{3}
 }
 
 func (m *ListIntegrationsRequest) XXX_Unmarshal(b []byte) error {
@@ -604,7 +286,7 @@ func (m *ListIntegrationsResponse) Reset()         { *m = ListIntegrationsRespon
 func (m *ListIntegrationsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListIntegrationsResponse) ProtoMessage()    {}
 func (*ListIntegrationsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{9}
+	return fileDescriptor_d466beb30e81ebe2, []int{4}
 }
 
 func (m *ListIntegrationsResponse) XXX_Unmarshal(b []byte) error {
@@ -653,7 +335,7 @@ func (m *GetIntegrationRequest) Reset()         { *m = GetIntegrationRequest{} }
 func (m *GetIntegrationRequest) String() string { return proto.CompactTextString(m) }
 func (*GetIntegrationRequest) ProtoMessage()    {}
 func (*GetIntegrationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{10}
+	return fileDescriptor_d466beb30e81ebe2, []int{5}
 }
 
 func (m *GetIntegrationRequest) XXX_Unmarshal(b []byte) error {
@@ -688,281 +370,13 @@ func (m *GetIntegrationRequest) GetIntegrationName() string {
 	return ""
 }
 
-type Install struct {
-	// Meta contains metadata about the Install.
-	Meta *v1.Meta `protobuf:"bytes,3,opt,name=meta,proto3" json:"meta,omitempty"`
-	// Integration that is setup by the Install.
-	Integration *Integration `protobuf:"bytes,5,opt,name=integration,proto3" json:"integration,omitempty"`
-	// Capabilities of the Install.
-	Capabilities *Capabilities `protobuf:"bytes,7,opt,name=capabilities,proto3" json:"capabilities,omitempty"`
-	// Disabled specifies when the Install should not be used.
-	Disabled             bool           `protobuf:"varint,9,opt,name=disabled,proto3" json:"disabled,omitempty"`
-	Status               Install_Status `protobuf:"varint,15,opt,name=status,proto3,enum=indent.v1.Install_Status" json:"status,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_unrecognized     []byte         `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
-}
-
-func (m *Install) Reset()         { *m = Install{} }
-func (m *Install) String() string { return proto.CompactTextString(m) }
-func (*Install) ProtoMessage()    {}
-func (*Install) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{11}
-}
-
-func (m *Install) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Install.Unmarshal(m, b)
-}
-func (m *Install) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Install.Marshal(b, m, deterministic)
-}
-func (m *Install) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Install.Merge(m, src)
-}
-func (m *Install) XXX_Size() int {
-	return xxx_messageInfo_Install.Size(m)
-}
-func (m *Install) XXX_DiscardUnknown() {
-	xxx_messageInfo_Install.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Install proto.InternalMessageInfo
-
-func (m *Install) GetMeta() *v1.Meta {
-	if m != nil {
-		return m.Meta
-	}
-	return nil
-}
-
-func (m *Install) GetIntegration() *Integration {
-	if m != nil {
-		return m.Integration
-	}
-	return nil
-}
-
-func (m *Install) GetCapabilities() *Capabilities {
-	if m != nil {
-		return m.Capabilities
-	}
-	return nil
-}
-
-func (m *Install) GetDisabled() bool {
-	if m != nil {
-		return m.Disabled
-	}
-	return false
-}
-
-func (m *Install) GetStatus() Install_Status {
-	if m != nil {
-		return m.Status
-	}
-	return Install_NotInstalled
-}
-
-type ListInstallsRequest struct {
-	// Name of space containing Installs.
-	SpaceName string `protobuf:"bytes,1,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
-	// LabelSelector specifies which Installs should be returned.
-	LabelSelector string `protobuf:"bytes,2,opt,name=label_selector,json=labelSelector,proto3" json:"label_selector,omitempty"`
-	// Kinds that must be supported by the Installs.
-	Kinds []string `protobuf:"bytes,4,rep,name=kinds,proto3" json:"kinds,omitempty"`
-	// Capabilities that must be supported by the Installs.
-	Capabilities []string `protobuf:"bytes,7,rep,name=capabilities,proto3" json:"capabilities,omitempty"`
-	// Max number of Installs to be returned.
-	PageSize int32 `protobuf:"varint,10,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	// Token for current page position for this list of Installs.
-	PageToken            string   `protobuf:"bytes,11,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ListInstallsRequest) Reset()         { *m = ListInstallsRequest{} }
-func (m *ListInstallsRequest) String() string { return proto.CompactTextString(m) }
-func (*ListInstallsRequest) ProtoMessage()    {}
-func (*ListInstallsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{12}
-}
-
-func (m *ListInstallsRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ListInstallsRequest.Unmarshal(m, b)
-}
-func (m *ListInstallsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ListInstallsRequest.Marshal(b, m, deterministic)
-}
-func (m *ListInstallsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListInstallsRequest.Merge(m, src)
-}
-func (m *ListInstallsRequest) XXX_Size() int {
-	return xxx_messageInfo_ListInstallsRequest.Size(m)
-}
-func (m *ListInstallsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListInstallsRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ListInstallsRequest proto.InternalMessageInfo
-
-func (m *ListInstallsRequest) GetSpaceName() string {
-	if m != nil {
-		return m.SpaceName
-	}
-	return ""
-}
-
-func (m *ListInstallsRequest) GetLabelSelector() string {
-	if m != nil {
-		return m.LabelSelector
-	}
-	return ""
-}
-
-func (m *ListInstallsRequest) GetKinds() []string {
-	if m != nil {
-		return m.Kinds
-	}
-	return nil
-}
-
-func (m *ListInstallsRequest) GetCapabilities() []string {
-	if m != nil {
-		return m.Capabilities
-	}
-	return nil
-}
-
-func (m *ListInstallsRequest) GetPageSize() int32 {
-	if m != nil {
-		return m.PageSize
-	}
-	return 0
-}
-
-func (m *ListInstallsRequest) GetPageToken() string {
-	if m != nil {
-		return m.PageToken
-	}
-	return ""
-}
-
-type ListInstallsResponse struct {
-	// Paginated list of Installs in a Space.
-	Installs []*Install `protobuf:"bytes,1,rep,name=installs,proto3" json:"installs,omitempty"`
-	// Page cursor for list of Installs.
-	NextPageToken        string   `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ListInstallsResponse) Reset()         { *m = ListInstallsResponse{} }
-func (m *ListInstallsResponse) String() string { return proto.CompactTextString(m) }
-func (*ListInstallsResponse) ProtoMessage()    {}
-func (*ListInstallsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{13}
-}
-
-func (m *ListInstallsResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ListInstallsResponse.Unmarshal(m, b)
-}
-func (m *ListInstallsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ListInstallsResponse.Marshal(b, m, deterministic)
-}
-func (m *ListInstallsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListInstallsResponse.Merge(m, src)
-}
-func (m *ListInstallsResponse) XXX_Size() int {
-	return xxx_messageInfo_ListInstallsResponse.Size(m)
-}
-func (m *ListInstallsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListInstallsResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ListInstallsResponse proto.InternalMessageInfo
-
-func (m *ListInstallsResponse) GetInstalls() []*Install {
-	if m != nil {
-		return m.Installs
-	}
-	return nil
-}
-
-func (m *ListInstallsResponse) GetNextPageToken() string {
-	if m != nil {
-		return m.NextPageToken
-	}
-	return ""
-}
-
-type GetInstallRequest struct {
-	// Name of space containing Install.
-	SpaceName string `protobuf:"bytes,5,opt,name=space_name,json=spaceName,proto3" json:"space_name,omitempty"`
-	// Name of the Install.
-	InstallName          string   `protobuf:"bytes,9,opt,name=install_name,json=installName,proto3" json:"install_name,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *GetInstallRequest) Reset()         { *m = GetInstallRequest{} }
-func (m *GetInstallRequest) String() string { return proto.CompactTextString(m) }
-func (*GetInstallRequest) ProtoMessage()    {}
-func (*GetInstallRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d466beb30e81ebe2, []int{14}
-}
-
-func (m *GetInstallRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetInstallRequest.Unmarshal(m, b)
-}
-func (m *GetInstallRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetInstallRequest.Marshal(b, m, deterministic)
-}
-func (m *GetInstallRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetInstallRequest.Merge(m, src)
-}
-func (m *GetInstallRequest) XXX_Size() int {
-	return xxx_messageInfo_GetInstallRequest.Size(m)
-}
-func (m *GetInstallRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetInstallRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GetInstallRequest proto.InternalMessageInfo
-
-func (m *GetInstallRequest) GetSpaceName() string {
-	if m != nil {
-		return m.SpaceName
-	}
-	return ""
-}
-
-func (m *GetInstallRequest) GetInstallName() string {
-	if m != nil {
-		return m.InstallName
-	}
-	return ""
-}
-
 func init() {
-	proto.RegisterEnum("indent.v1.Install_Status", Install_Status_name, Install_Status_value)
 	proto.RegisterType((*GroupVersionKind)(nil), "indent.v1.GroupVersionKind")
 	proto.RegisterType((*Capabilities)(nil), "indent.v1.Capabilities")
 	proto.RegisterType((*Integration)(nil), "indent.v1.Integration")
-	proto.RegisterType((*Failure)(nil), "indent.v1.Failure")
-	proto.RegisterType((*CreateFailureRequest)(nil), "indent.v1.CreateFailureRequest")
-	proto.RegisterType((*GetFailureRequest)(nil), "indent.v1.GetFailureRequest")
-	proto.RegisterType((*ListFailuresRequest)(nil), "indent.v1.ListFailuresRequest")
-	proto.RegisterType((*ListFailuresResponse)(nil), "indent.v1.ListFailuresResponse")
 	proto.RegisterType((*ListIntegrationsRequest)(nil), "indent.v1.ListIntegrationsRequest")
 	proto.RegisterType((*ListIntegrationsResponse)(nil), "indent.v1.ListIntegrationsResponse")
 	proto.RegisterType((*GetIntegrationRequest)(nil), "indent.v1.GetIntegrationRequest")
-	proto.RegisterType((*Install)(nil), "indent.v1.Install")
-	proto.RegisterType((*ListInstallsRequest)(nil), "indent.v1.ListInstallsRequest")
-	proto.RegisterType((*ListInstallsResponse)(nil), "indent.v1.ListInstallsResponse")
-	proto.RegisterType((*GetInstallRequest)(nil), "indent.v1.GetInstallRequest")
 }
 
 func init() {
@@ -970,76 +384,49 @@ func init() {
 }
 
 var fileDescriptor_d466beb30e81ebe2 = []byte{
-	// 1100 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x57, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0x66, 0x9d, 0x38, 0x8e, 0x9f, 0x63, 0xc7, 0x4c, 0xd3, 0x66, 0x71, 0x4b, 0x63, 0xb6, 0xa8,
-	0xb8, 0x6a, 0xe4, 0xc5, 0xe1, 0x10, 0x51, 0x54, 0x50, 0x52, 0x41, 0x14, 0x01, 0x55, 0xe4, 0x40,
-	0x14, 0x21, 0x24, 0x6b, 0x62, 0x0f, 0x66, 0xd4, 0xcd, 0xee, 0x76, 0x67, 0x9c, 0x42, 0xa3, 0x20,
-	0xc1, 0x0d, 0xf5, 0xc8, 0x7f, 0xc0, 0x91, 0x3f, 0x03, 0x71, 0xe2, 0xca, 0x01, 0xb8, 0x73, 0xe1,
-	0xc0, 0xff, 0x80, 0x76, 0x7e, 0xec, 0xce, 0x7a, 0xd7, 0x4d, 0x2d, 0x6e, 0x1c, 0x22, 0xc5, 0xef,
-	0x7d, 0x33, 0xdf, 0xfb, 0xde, 0xce, 0xfb, 0x76, 0x16, 0x36, 0xa8, 0x3f, 0x22, 0x3e, 0x77, 0xcf,
-	0x7a, 0x2e, 0xf5, 0x39, 0x19, 0x47, 0x98, 0xd3, 0xc0, 0x1f, 0xe0, 0x90, 0x76, 0xc3, 0x28, 0xe0,
-	0x01, 0xaa, 0x4a, 0x40, 0xf7, 0xac, 0xd7, 0xba, 0x31, 0x0e, 0x82, 0xb1, 0x47, 0x5c, 0x1c, 0x52,
-	0x17, 0xfb, 0x7e, 0xc0, 0x05, 0x96, 0x49, 0x60, 0x6b, 0x5d, 0x65, 0xa3, 0x70, 0xe8, 0x32, 0x8e,
-	0xf9, 0x44, 0x27, 0x34, 0x05, 0x9e, 0x8c, 0xa8, 0x20, 0x8a, 0x08, 0x0b, 0x26, 0xd1, 0x90, 0x68,
-	0xc0, 0x9a, 0x02, 0x78, 0xc1, 0x38, 0xfe, 0x93, 0x51, 0xe7, 0x4b, 0x68, 0xee, 0x45, 0xc1, 0x24,
-	0x3c, 0x22, 0x11, 0xa3, 0x81, 0xff, 0x21, 0xf5, 0x47, 0xa8, 0x05, 0xe5, 0x71, 0x1c, 0xb3, 0xad,
-	0xb6, 0xd5, 0xa9, 0xee, 0x2e, 0xfe, 0xf1, 0xf3, 0x86, 0xd5, 0x97, 0x21, 0x74, 0x13, 0x2a, 0x67,
-	0x12, 0x6a, 0x97, 0x8c, 0xac, 0x0e, 0x22, 0x1b, 0x16, 0x1f, 0x51, 0x7f, 0x64, 0x2f, 0x18, 0x49,
-	0x11, 0x71, 0x1e, 0xc3, 0xca, 0x03, 0x1c, 0xe2, 0x13, 0xea, 0x51, 0x4e, 0x09, 0x43, 0xdb, 0x50,
-	0x8e, 0xe3, 0xcc, 0x5e, 0x6a, 0x2f, 0x74, 0x6a, 0x5b, 0xd7, 0xbb, 0x49, 0x0b, 0xba, 0xd3, 0x15,
-	0xe9, 0x12, 0x04, 0x1e, 0x75, 0x60, 0x65, 0x68, 0x6c, 0x64, 0x57, 0xdb, 0x0b, 0x09, 0x55, 0x26,
-	0xe3, 0x7c, 0x6b, 0x41, 0x6d, 0x3f, 0xed, 0x37, 0x72, 0x61, 0xf1, 0x94, 0x70, 0x2c, 0x8a, 0xab,
-	0x6d, 0x5d, 0xd5, 0x8c, 0xa2, 0x65, 0x31, 0xef, 0xc7, 0x84, 0x63, 0x5d, 0x73, 0x0c, 0x44, 0x3b,
-	0x39, 0xaa, 0x78, 0xe1, 0xba, 0x51, 0xaa, 0x29, 0xa9, 0xb0, 0x86, 0x3f, 0x2d, 0xa8, 0x7c, 0x80,
-	0xa9, 0x37, 0x89, 0x08, 0xba, 0xa3, 0xf8, 0xad, 0xe7, 0xf0, 0x2b, 0xe6, 0x37, 0x61, 0x49, 0x3e,
-	0x5e, 0x55, 0x2c, 0xea, 0xca, 0x07, 0xdf, 0x8d, 0xc2, 0x61, 0xf7, 0x50, 0x64, 0x14, 0x9d, 0xc2,
-	0xa1, 0xfb, 0xd0, 0x88, 0x88, 0x87, 0x39, 0x19, 0x0d, 0xc8, 0x19, 0xf1, 0x39, 0xb3, 0xcb, 0xa2,
-	0xb1, 0xd7, 0x72, 0x34, 0xef, 0xc7, 0xe9, 0x7e, 0x5d, 0xa1, 0xc5, 0x2f, 0x86, 0xb6, 0xa0, 0x42,
-	0x7d, 0xc6, 0xb1, 0xe7, 0xd9, 0x15, 0xc5, 0x98, 0xaa, 0xdc, 0x97, 0x19, 0xfd, 0xb0, 0x15, 0xd0,
-	0x19, 0xc2, 0xda, 0x83, 0x88, 0x60, 0x4e, 0x94, 0xc0, 0x3e, 0x79, 0x3c, 0x21, 0x8c, 0xa3, 0x57,
-	0x01, 0x58, 0x88, 0x87, 0x64, 0xe0, 0xe3, 0x53, 0x22, 0x4f, 0x51, 0xbf, 0x2a, 0x22, 0x0f, 0xf1,
-	0x29, 0x41, 0x9b, 0x50, 0xf9, 0x42, 0x2e, 0xb0, 0xcb, 0x39, 0x2a, 0xbd, 0x95, 0x86, 0x38, 0x9f,
-	0xc2, 0xcb, 0x7b, 0x84, 0xcf, 0xc7, 0xf0, 0x1a, 0xac, 0xa8, 0xe5, 0x12, 0x50, 0x16, 0x80, 0x9a,
-	0x8a, 0xc5, 0x10, 0xe7, 0x17, 0x0b, 0xae, 0x7c, 0x44, 0x99, 0xde, 0x98, 0xe9, 0x9d, 0x6f, 0xe5,
-	0x77, 0x56, 0xb2, 0x8d, 0xfd, 0xef, 0x40, 0xd3, 0x9c, 0x63, 0x01, 0x15, 0x27, 0xbe, 0xbf, 0x6a,
-	0xc4, 0x75, 0x29, 0xaa, 0x5d, 0x12, 0xb6, 0x28, 0x4b, 0x51, 0x31, 0x01, 0xb9, 0x0e, 0xd5, 0x10,
-	0x8f, 0xc9, 0x80, 0xd1, 0xa7, 0xc4, 0x86, 0xb6, 0xd5, 0x29, 0xf7, 0x97, 0xe3, 0xc0, 0x21, 0x7d,
-	0x4a, 0x62, 0xa5, 0x22, 0xc9, 0x83, 0x47, 0xc4, 0xb7, 0x6b, 0x52, 0x69, 0x1c, 0xf9, 0x24, 0x0e,
-	0x38, 0x3e, 0xac, 0x65, 0x55, 0xb0, 0x30, 0xf0, 0x19, 0x41, 0x5d, 0x58, 0x56, 0x6a, 0x99, 0x6d,
-	0x89, 0x73, 0x50, 0xd4, 0xe4, 0x04, 0x83, 0x6e, 0xc3, 0xaa, 0x4f, 0xbe, 0xe2, 0x03, 0x83, 0x4b,
-	0xcc, 0x77, 0xbf, 0x1e, 0x87, 0x0f, 0x12, 0xbe, 0x7f, 0x2c, 0x58, 0x8f, 0x09, 0x8d, 0xb1, 0x9a,
-	0xaf, 0x75, 0x77, 0xa1, 0xe1, 0xe1, 0x13, 0xe2, 0x0d, 0x18, 0xf1, 0xc8, 0x90, 0x07, 0x51, 0xc6,
-	0x47, 0xea, 0x22, 0x77, 0xa8, 0x52, 0xb1, 0x13, 0x49, 0x8f, 0x58, 0x34, 0x66, 0x7c, 0x86, 0x0d,
-	0x54, 0x66, 0xd9, 0xc0, 0x7f, 0xea, 0xef, 0x37, 0x60, 0xe7, 0xe5, 0xaa, 0x1e, 0xdf, 0x8b, 0x1f,
-	0x6d, 0x1a, 0x57, 0x7d, 0xbe, 0x96, 0x99, 0x9b, 0x24, 0xdd, 0xcf, 0x60, 0x5f, 0xb8, 0xdf, 0xa7,
-	0x70, 0x75, 0x8f, 0x98, 0xf4, 0xc5, 0xcd, 0x2e, 0x17, 0x37, 0xdb, 0x2d, 0x38, 0xa7, 0x55, 0x03,
-	0x3a, 0x7d, 0x5a, 0x9d, 0xdf, 0x4b, 0x50, 0x51, 0xc3, 0x3e, 0xbf, 0x5b, 0xbe, 0x0b, 0x35, 0x63,
-	0x3f, 0x35, 0xdb, 0x33, 0xda, 0xa1, 0x16, 0x9a, 0x0b, 0x72, 0x6e, 0x5b, 0x99, 0xdb, 0x6d, 0x51,
-	0x1b, 0x96, 0x47, 0x94, 0xe1, 0x13, 0x8f, 0x8c, 0x84, 0xd0, 0x65, 0x85, 0x4a, 0xa2, 0x68, 0x3b,
-	0x31, 0xd6, 0xd5, 0xb6, 0xd5, 0x69, 0x6c, 0xbd, 0x92, 0xb7, 0xb9, 0x42, 0x7f, 0x75, 0xee, 0xc3,
-	0x92, 0x8c, 0xa3, 0x26, 0xac, 0x3c, 0x0c, 0xb8, 0x02, 0x93, 0x51, 0xf3, 0x25, 0x54, 0x87, 0x6a,
-	0xfa, 0xd3, 0x42, 0x08, 0x1a, 0x3b, 0x43, 0xfd, 0xb0, 0x68, 0x44, 0x46, 0xcd, 0x92, 0xf3, 0xb7,
-	0xf2, 0x1b, 0x85, 0xfb, 0x5f, 0x0f, 0x0d, 0x97, 0xa6, 0x94, 0x4a, 0x4d, 0x4d, 0x49, 0xf9, 0x5e,
-	0x91, 0x29, 0x29, 0x78, 0x3f, 0xc1, 0xa0, 0xcd, 0x19, 0x43, 0xa2, 0x75, 0x67, 0x47, 0x05, 0x8b,
-	0x17, 0x85, 0xde, 0x65, 0x9e, 0x31, 0x79, 0x63, 0xca, 0xa3, 0xcd, 0x11, 0x31, 0x9d, 0x7a, 0xeb,
-	0x59, 0x05, 0x1a, 0xc6, 0x21, 0xde, 0x39, 0xd8, 0x47, 0xdf, 0x5b, 0xd0, 0x9c, 0x76, 0x08, 0xe4,
-	0x18, 0xb2, 0x66, 0xb8, 0x65, 0xeb, 0xd6, 0x73, 0x31, 0xb2, 0x63, 0xce, 0xe6, 0x77, 0xbf, 0xfd,
-	0xf5, 0x43, 0xe9, 0x36, 0x7a, 0x3d, 0xbe, 0xd1, 0x89, 0x82, 0x99, 0x7b, 0x9e, 0x0a, 0xba, 0x70,
-	0x33, 0xa6, 0xf2, 0xcc, 0x82, 0x46, 0xd6, 0x2d, 0x50, 0xdb, 0xbc, 0x56, 0x15, 0x19, 0x49, 0x6b,
-	0xc6, 0x80, 0x3a, 0xef, 0x09, 0xea, 0xb7, 0xd1, 0xf6, 0x8b, 0x50, 0xbb, 0xe7, 0xd3, 0x3e, 0x73,
-	0x81, 0xbe, 0x86, 0x15, 0xf3, 0x14, 0xa0, 0x9b, 0x39, 0xc1, 0x99, 0x49, 0x68, 0x6d, 0xcc, 0xcc,
-	0xab, 0x66, 0x74, 0x44, 0x45, 0x0e, 0x6a, 0xcf, 0xae, 0x48, 0x51, 0x3d, 0x01, 0x48, 0x8f, 0x02,
-	0xba, 0x31, 0xdd, 0x03, 0xf3, 0x84, 0xb4, 0x0a, 0x8e, 0xa0, 0xb3, 0x2d, 0x98, 0x7a, 0xc8, 0xbd,
-	0x8c, 0x29, 0xd6, 0x9d, 0x1e, 0x9c, 0x44, 0xb3, 0x7e, 0x1d, 0xe7, 0x34, 0x4f, 0xdd, 0x36, 0x72,
-	0x9a, 0xa7, 0xdf, 0xe3, 0x97, 0x6b, 0x4e, 0xde, 0xe0, 0x52, 0xb3, 0xbe, 0x6a, 0x4e, 0x69, 0xce,
-	0x5e, 0x9f, 0x5a, 0x05, 0x77, 0x81, 0xcb, 0x35, 0x6b, 0x26, 0xf7, 0xdc, 0xbc, 0x5b, 0x5d, 0xa0,
-	0x27, 0x50, 0xcf, 0xdc, 0x02, 0x91, 0x29, 0xaa, 0xe8, 0x7e, 0x58, 0x48, 0xdf, 0x13, 0xf4, 0x77,
-	0x9d, 0x4b, 0x85, 0xde, 0xd3, 0x37, 0xc3, 0xdd, 0x63, 0xa8, 0x0f, 0x83, 0xd3, 0x74, 0xaf, 0xdd,
-	0x2b, 0xe6, 0x6c, 0x86, 0xf4, 0x20, 0xfe, 0xc2, 0x39, 0xb0, 0x3e, 0x43, 0xc9, 0xd7, 0xd7, 0x3b,
-	0xf2, 0xbf, 0xb3, 0xde, 0x8f, 0xa5, 0x85, 0xfd, 0xe3, 0xe3, 0x9f, 0x4a, 0xd5, 0x7d, 0xb9, 0xf8,
-	0xa8, 0xf7, 0xab, 0xfe, 0xff, 0xf3, 0xa3, 0xde, 0xc9, 0x92, 0xf8, 0x38, 0x7a, 0xeb, 0xdf, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0x6f, 0x5e, 0x4d, 0x35, 0xb8, 0x0d, 0x00, 0x00,
+	// 665 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0x4f, 0x6b, 0x13, 0x41,
+	0x1c, 0x65, 0xf3, 0xa7, 0x6d, 0x7e, 0xe9, 0x3f, 0x46, 0x6b, 0x97, 0x54, 0x4d, 0xd8, 0x4a, 0x09,
+	0x28, 0x59, 0x52, 0x0f, 0x45, 0x3d, 0x88, 0x11, 0x29, 0xc1, 0x3f, 0x84, 0x54, 0x4a, 0x11, 0x21,
+	0x4c, 0x92, 0x9f, 0x71, 0xe8, 0xee, 0xce, 0x76, 0x67, 0x12, 0xb4, 0xa5, 0x1e, 0x04, 0x0f, 0xe2,
+	0xd1, 0x2f, 0x20, 0x1e, 0xfb, 0x2d, 0xf4, 0xe8, 0xd5, 0x8b, 0x1f, 0xc0, 0xab, 0xdf, 0x41, 0x66,
+	0x36, 0x9b, 0x4e, 0xd2, 0x44, 0x3c, 0x2c, 0x4c, 0xde, 0x7b, 0x33, 0xef, 0xcd, 0x9b, 0xcc, 0x40,
+	0x91, 0x05, 0x5d, 0x0c, 0xa4, 0x3b, 0xa8, 0xba, 0x2c, 0x90, 0xd8, 0x8b, 0xa8, 0x64, 0x3c, 0x68,
+	0xd1, 0x90, 0x55, 0xc2, 0x88, 0x4b, 0x4e, 0x72, 0xb1, 0xa0, 0x32, 0xa8, 0x16, 0xae, 0xf6, 0x38,
+	0xef, 0x79, 0xe8, 0xd2, 0x90, 0xb9, 0x34, 0x08, 0xb8, 0xd4, 0x5a, 0x11, 0x0b, 0x0b, 0x1b, 0x43,
+	0x56, 0xff, 0x6a, 0xf7, 0x5f, 0xb9, 0xe8, 0x87, 0xf2, 0xed, 0x90, 0x2c, 0x4e, 0x92, 0x92, 0xf9,
+	0x28, 0x24, 0xf5, 0xc3, 0xa1, 0x60, 0x7d, 0x28, 0x88, 0xc2, 0x8e, 0x2b, 0x24, 0x95, 0xfd, 0x64,
+	0xd9, 0x24, 0x20, 0xed, 0x77, 0x99, 0x8e, 0x19, 0xa1, 0xe0, 0xfd, 0xa8, 0x83, 0x89, 0xe0, 0xf2,
+	0x50, 0xe0, 0xf1, 0x9e, 0xfa, 0x26, 0x50, 0x71, 0xe4, 0xa9, 0x2f, 0x46, 0x9d, 0xd7, 0xb0, 0xba,
+	0x1b, 0xf1, 0x7e, 0xb8, 0x8f, 0x91, 0x60, 0x3c, 0x78, 0xcc, 0x82, 0x2e, 0x29, 0x40, 0xb6, 0xa7,
+	0x30, 0xdb, 0x2a, 0x59, 0xe5, 0x5c, 0x2d, 0xf3, 0xeb, 0x7b, 0xd1, 0x6a, 0xc6, 0x10, 0xb9, 0x0e,
+	0xf3, 0x83, 0x58, 0x6a, 0xa7, 0x0c, 0x36, 0x01, 0x89, 0x0d, 0x99, 0x43, 0x16, 0x74, 0xed, 0xb4,
+	0x41, 0x6a, 0xc4, 0x39, 0x82, 0xc5, 0x87, 0x34, 0xa4, 0x6d, 0xe6, 0x31, 0xc9, 0x50, 0x90, 0x1d,
+	0xc8, 0x2a, 0x5c, 0xd8, 0x73, 0xa5, 0x74, 0x39, 0xbf, 0xbd, 0x51, 0x19, 0xd5, 0x5a, 0x99, 0x4c,
+	0x94, 0x44, 0xd0, 0x7a, 0x52, 0x86, 0xc5, 0x8e, 0xb1, 0x90, 0x9d, 0x2b, 0xa5, 0x47, 0x56, 0x63,
+	0x8c, 0xf3, 0xc1, 0x82, 0x7c, 0xfd, 0xfc, 0x0c, 0x89, 0x0b, 0x19, 0x1f, 0x25, 0xd5, 0xe1, 0xf2,
+	0xdb, 0x6b, 0x89, 0xa3, 0x2e, 0x52, 0xf9, 0x3e, 0x45, 0x49, 0x93, 0xcc, 0x4a, 0x48, 0x1e, 0x5d,
+	0xb0, 0x52, 0x13, 0xd7, 0x8d, 0xa8, 0xe6, 0x96, 0x6a, 0x0b, 0x5f, 0xbe, 0x15, 0xad, 0x29, 0x39,
+	0xfe, 0x58, 0xb0, 0xfe, 0x84, 0x09, 0x69, 0x64, 0x11, 0x4d, 0x3c, 0xea, 0xa3, 0x90, 0x64, 0x13,
+	0x40, 0x84, 0xb4, 0x83, 0xad, 0x80, 0xfa, 0x38, 0xd6, 0x78, 0x4e, 0xe3, 0xcf, 0xa8, 0x8f, 0xe4,
+	0x26, 0x2c, 0x7b, 0xb4, 0x8d, 0x5e, 0x4b, 0xa0, 0x87, 0x1d, 0xc9, 0xa3, 0xb1, 0xf2, 0x97, 0x34,
+	0xb7, 0x37, 0xa4, 0xd4, 0xf1, 0xc5, 0xc5, 0x66, 0x8c, 0x62, 0x66, 0x74, 0x37, 0x3f, 0xab, 0x3b,
+	0xb2, 0x01, 0xb9, 0x90, 0xf6, 0xb0, 0x25, 0xd8, 0x31, 0xda, 0x50, 0xb2, 0xca, 0xd9, 0xe6, 0x82,
+	0x02, 0xf6, 0xd8, 0x31, 0x92, 0x6b, 0x00, 0x9a, 0x94, 0xfc, 0x10, 0x03, 0x3b, 0xaf, 0xb2, 0x34,
+	0xb5, 0xfc, 0xb9, 0x02, 0x9c, 0x77, 0x60, 0x5f, 0xdc, 0xae, 0x08, 0x79, 0x20, 0x90, 0xdc, 0x85,
+	0x45, 0xe3, 0x5a, 0x09, 0xdb, 0xd2, 0xa7, 0x7f, 0xc5, 0xa8, 0xd4, 0x98, 0xd6, 0x1c, 0xd3, 0x92,
+	0x2d, 0x58, 0x09, 0xf0, 0x8d, 0x6c, 0x19, 0xde, 0xba, 0x87, 0xe6, 0x92, 0x82, 0x1b, 0x23, 0x7f,
+	0x1f, 0xd6, 0x76, 0xd1, 0xb4, 0x9f, 0x5e, 0x76, 0x76, 0x7a, 0xd9, 0x2e, 0xac, 0x9a, 0x17, 0x5f,
+	0x4b, 0x73, 0x86, 0x74, 0xc5, 0x60, 0xd5, 0x84, 0xed, 0xb3, 0x14, 0x2c, 0x1b, 0x66, 0x0f, 0x1a,
+	0x75, 0xf2, 0xd1, 0x82, 0xd5, 0xc9, 0x0a, 0x88, 0x63, 0x6c, 0x72, 0xc6, 0xdf, 0xa1, 0xb0, 0xf9,
+	0x4f, 0x4d, 0xdc, 0xa1, 0x73, 0xeb, 0xfd, 0xcf, 0xdf, 0x9f, 0x53, 0x5b, 0xe4, 0x86, 0xba, 0xfd,
+	0x3a, 0xb8, 0x70, 0x4f, 0xce, 0x37, 0x76, 0xea, 0x8e, 0xb5, 0xf6, 0xc9, 0x82, 0xe5, 0xf1, 0x3a,
+	0x48, 0xc9, 0xbc, 0x6c, 0xd3, 0x9a, 0x2a, 0xcc, 0x38, 0x10, 0xe7, 0xbe, 0xb6, 0xbe, 0x43, 0x76,
+	0xfe, 0xc7, 0xda, 0x3d, 0x99, 0x2c, 0xf2, 0xb4, 0x76, 0x00, 0x4b, 0x1d, 0xee, 0x9f, 0xaf, 0x5e,
+	0xbb, 0x64, 0x56, 0x17, 0xb2, 0x86, 0x7a, 0x96, 0x1a, 0xd6, 0x0b, 0x32, 0x7a, 0x86, 0xef, 0xc5,
+	0xa3, 0x41, 0xf5, 0x6b, 0x2a, 0x5d, 0x3f, 0x38, 0x38, 0x4b, 0xe5, 0xea, 0xf1, 0xe4, 0xfd, 0xea,
+	0x8f, 0x64, 0xfc, 0x72, 0xbf, 0xda, 0x9e, 0xd3, 0x2f, 0xda, 0xed, 0xbf, 0x01, 0x00, 0x00, 0xff,
+	0xff, 0x29, 0x00, 0x14, 0xee, 0xc1, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1058,16 +445,6 @@ type IntegrationAPIClient interface {
 	ListIntegrations(ctx context.Context, in *ListIntegrationsRequest, opts ...grpc.CallOption) (*ListIntegrationsResponse, error)
 	// Retrieve specified Integration by name and space.
 	GetIntegration(ctx context.Context, in *GetIntegrationRequest, opts ...grpc.CallOption) (*Integration, error)
-	// List Installs that have been added to the space.
-	ListInstalls(ctx context.Context, in *ListInstallsRequest, opts ...grpc.CallOption) (*ListInstallsResponse, error)
-	// Retrieve specified Install by name and space.
-	GetInstall(ctx context.Context, in *GetInstallRequest, opts ...grpc.CallOption) (*Install, error)
-	// List Integrations available to be installed.
-	ListFailures(ctx context.Context, in *ListFailuresRequest, opts ...grpc.CallOption) (*ListFailuresResponse, error)
-	// Retrieve specified Integration by name and space.
-	GetFailure(ctx context.Context, in *GetFailureRequest, opts ...grpc.CallOption) (*Failure, error)
-	// Retrieve specified Integration by name and space.
-	CreateFailure(ctx context.Context, in *CreateFailureRequest, opts ...grpc.CallOption) (*Failure, error)
 }
 
 type integrationAPIClient struct {
@@ -1096,67 +473,12 @@ func (c *integrationAPIClient) GetIntegration(ctx context.Context, in *GetIntegr
 	return out, nil
 }
 
-func (c *integrationAPIClient) ListInstalls(ctx context.Context, in *ListInstallsRequest, opts ...grpc.CallOption) (*ListInstallsResponse, error) {
-	out := new(ListInstallsResponse)
-	err := c.cc.Invoke(ctx, "/indent.v1.IntegrationAPI/ListInstalls", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *integrationAPIClient) GetInstall(ctx context.Context, in *GetInstallRequest, opts ...grpc.CallOption) (*Install, error) {
-	out := new(Install)
-	err := c.cc.Invoke(ctx, "/indent.v1.IntegrationAPI/GetInstall", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *integrationAPIClient) ListFailures(ctx context.Context, in *ListFailuresRequest, opts ...grpc.CallOption) (*ListFailuresResponse, error) {
-	out := new(ListFailuresResponse)
-	err := c.cc.Invoke(ctx, "/indent.v1.IntegrationAPI/ListFailures", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *integrationAPIClient) GetFailure(ctx context.Context, in *GetFailureRequest, opts ...grpc.CallOption) (*Failure, error) {
-	out := new(Failure)
-	err := c.cc.Invoke(ctx, "/indent.v1.IntegrationAPI/GetFailure", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *integrationAPIClient) CreateFailure(ctx context.Context, in *CreateFailureRequest, opts ...grpc.CallOption) (*Failure, error) {
-	out := new(Failure)
-	err := c.cc.Invoke(ctx, "/indent.v1.IntegrationAPI/CreateFailure", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // IntegrationAPIServer is the server API for IntegrationAPI service.
 type IntegrationAPIServer interface {
 	// List Integrations available to be installed.
 	ListIntegrations(context.Context, *ListIntegrationsRequest) (*ListIntegrationsResponse, error)
 	// Retrieve specified Integration by name and space.
 	GetIntegration(context.Context, *GetIntegrationRequest) (*Integration, error)
-	// List Installs that have been added to the space.
-	ListInstalls(context.Context, *ListInstallsRequest) (*ListInstallsResponse, error)
-	// Retrieve specified Install by name and space.
-	GetInstall(context.Context, *GetInstallRequest) (*Install, error)
-	// List Integrations available to be installed.
-	ListFailures(context.Context, *ListFailuresRequest) (*ListFailuresResponse, error)
-	// Retrieve specified Integration by name and space.
-	GetFailure(context.Context, *GetFailureRequest) (*Failure, error)
-	// Retrieve specified Integration by name and space.
-	CreateFailure(context.Context, *CreateFailureRequest) (*Failure, error)
 }
 
 // UnimplementedIntegrationAPIServer can be embedded to have forward compatible implementations.
@@ -1164,25 +486,10 @@ type UnimplementedIntegrationAPIServer struct {
 }
 
 func (*UnimplementedIntegrationAPIServer) ListIntegrations(ctx context.Context, req *ListIntegrationsRequest) (*ListIntegrationsResponse, error) {
-	return nil, status1.Errorf(codes.Unimplemented, "method ListIntegrations not implemented")
+	return nil, status.Errorf(codes.Unimplemented, "method ListIntegrations not implemented")
 }
 func (*UnimplementedIntegrationAPIServer) GetIntegration(ctx context.Context, req *GetIntegrationRequest) (*Integration, error) {
-	return nil, status1.Errorf(codes.Unimplemented, "method GetIntegration not implemented")
-}
-func (*UnimplementedIntegrationAPIServer) ListInstalls(ctx context.Context, req *ListInstallsRequest) (*ListInstallsResponse, error) {
-	return nil, status1.Errorf(codes.Unimplemented, "method ListInstalls not implemented")
-}
-func (*UnimplementedIntegrationAPIServer) GetInstall(ctx context.Context, req *GetInstallRequest) (*Install, error) {
-	return nil, status1.Errorf(codes.Unimplemented, "method GetInstall not implemented")
-}
-func (*UnimplementedIntegrationAPIServer) ListFailures(ctx context.Context, req *ListFailuresRequest) (*ListFailuresResponse, error) {
-	return nil, status1.Errorf(codes.Unimplemented, "method ListFailures not implemented")
-}
-func (*UnimplementedIntegrationAPIServer) GetFailure(ctx context.Context, req *GetFailureRequest) (*Failure, error) {
-	return nil, status1.Errorf(codes.Unimplemented, "method GetFailure not implemented")
-}
-func (*UnimplementedIntegrationAPIServer) CreateFailure(ctx context.Context, req *CreateFailureRequest) (*Failure, error) {
-	return nil, status1.Errorf(codes.Unimplemented, "method CreateFailure not implemented")
+	return nil, status.Errorf(codes.Unimplemented, "method GetIntegration not implemented")
 }
 
 func RegisterIntegrationAPIServer(s *grpc.Server, srv IntegrationAPIServer) {
@@ -1225,96 +532,6 @@ func _IntegrationAPI_GetIntegration_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _IntegrationAPI_ListInstalls_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListInstallsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IntegrationAPIServer).ListInstalls(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/indent.v1.IntegrationAPI/ListInstalls",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IntegrationAPIServer).ListInstalls(ctx, req.(*ListInstallsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _IntegrationAPI_GetInstall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetInstallRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IntegrationAPIServer).GetInstall(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/indent.v1.IntegrationAPI/GetInstall",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IntegrationAPIServer).GetInstall(ctx, req.(*GetInstallRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _IntegrationAPI_ListFailures_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListFailuresRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IntegrationAPIServer).ListFailures(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/indent.v1.IntegrationAPI/ListFailures",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IntegrationAPIServer).ListFailures(ctx, req.(*ListFailuresRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _IntegrationAPI_GetFailure_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetFailureRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IntegrationAPIServer).GetFailure(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/indent.v1.IntegrationAPI/GetFailure",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IntegrationAPIServer).GetFailure(ctx, req.(*GetFailureRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _IntegrationAPI_CreateFailure_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateFailureRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IntegrationAPIServer).CreateFailure(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/indent.v1.IntegrationAPI/CreateFailure",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IntegrationAPIServer).CreateFailure(ctx, req.(*CreateFailureRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 var _IntegrationAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "indent.v1.IntegrationAPI",
 	HandlerType: (*IntegrationAPIServer)(nil),
@@ -1326,26 +543,6 @@ var _IntegrationAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetIntegration",
 			Handler:    _IntegrationAPI_GetIntegration_Handler,
-		},
-		{
-			MethodName: "ListInstalls",
-			Handler:    _IntegrationAPI_ListInstalls_Handler,
-		},
-		{
-			MethodName: "GetInstall",
-			Handler:    _IntegrationAPI_GetInstall_Handler,
-		},
-		{
-			MethodName: "ListFailures",
-			Handler:    _IntegrationAPI_ListFailures_Handler,
-		},
-		{
-			MethodName: "GetFailure",
-			Handler:    _IntegrationAPI_GetFailure_Handler,
-		},
-		{
-			MethodName: "CreateFailure",
-			Handler:    _IntegrationAPI_CreateFailure_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -15,4 +15,7 @@ const (
 
 	// LabelReason provides a comma-delimited list of example reasons for a Resource.
 	LabelReason = "reason"
+
+	// LabelSource contains the Source of the command.
+	LabelSource = "indent.com/app/cmd/source"
 )
