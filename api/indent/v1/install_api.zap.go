@@ -167,6 +167,23 @@ func (m *GetInstallRequest) MarshalLogObject(oe zapcore.ObjectEncoder) error {
 	return nil
 }
 
+func (m *UpdateInstallRequest) MarshalLogObject(oe zapcore.ObjectEncoder) error {
+	var keyName string
+	_ = keyName
+
+	if m == nil {
+		return nil
+	}
+
+	keyName = "SpaceName" // field spaceName = 1
+	oe.AddString(keyName, m.SpaceName)
+
+	keyName = "InstallName" // field installName = 2
+	oe.AddString(keyName, m.InstallName)
+
+	return nil
+}
+
 func (m *ToggleInstallRequest) MarshalLogObject(oe zapcore.ObjectEncoder) error {
 	var keyName string
 	_ = keyName
@@ -196,6 +213,40 @@ func (m *DeleteInstallRequest) MarshalLogObject(oe zapcore.ObjectEncoder) error 
 	oe.AddString(keyName, m.SpaceName)
 
 	keyName = "InstallName" // field installName = 9
+	oe.AddString(keyName, m.InstallName)
+
+	return nil
+}
+
+func (m *GetInstallSetupRequest) MarshalLogObject(oe zapcore.ObjectEncoder) error {
+	var keyName string
+	_ = keyName
+
+	if m == nil {
+		return nil
+	}
+
+	keyName = "SpaceName" // field spaceName = 1
+	oe.AddString(keyName, m.SpaceName)
+
+	keyName = "InstallName" // field installName = 3
+	oe.AddString(keyName, m.InstallName)
+
+	return nil
+}
+
+func (m *UpdateInstallSetupRequest) MarshalLogObject(oe zapcore.ObjectEncoder) error {
+	var keyName string
+	_ = keyName
+
+	if m == nil {
+		return nil
+	}
+
+	keyName = "SpaceName" // field spaceName = 1
+	oe.AddString(keyName, m.SpaceName)
+
+	keyName = "InstallName" // field installName = 3
 	oe.AddString(keyName, m.InstallName)
 
 	return nil

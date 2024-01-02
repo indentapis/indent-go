@@ -16,9 +16,11 @@ var _ APIClient = new(apiClientImpl)
 
 // APIClient returns type specific clients.
 type APIClient interface {
+	Accounts() indentv1.AccountAPIClient
 	Blocks() indentv1.BlockAPIClient
 	Petitions() indentv1.PetitionAPIClient
 	Resources() indentv1.ResourceAPIClient
+	Tokens() indentv1.TokenAPIClient
 	Webhooks() indentv1.WebhookAPIClient
 }
 
@@ -56,6 +58,10 @@ type apiClientImpl struct {
 	conn *grpc.ClientConn
 }
 
+func (c apiClientImpl) Accounts() indentv1.AccountAPIClient {
+	return indentv1.NewAccountAPIClient(c.conn)
+}
+
 func (c apiClientImpl) Blocks() indentv1.BlockAPIClient {
 	return indentv1.NewBlockAPIClient(c.conn)
 }
@@ -66,6 +72,10 @@ func (c apiClientImpl) Petitions() indentv1.PetitionAPIClient {
 
 func (c apiClientImpl) Resources() indentv1.ResourceAPIClient {
 	return indentv1.NewResourceAPIClient(c.conn)
+}
+
+func (c apiClientImpl) Tokens() indentv1.TokenAPIClient {
+	return indentv1.NewTokenAPIClient(c.conn)
 }
 
 func (c apiClientImpl) Webhooks() indentv1.WebhookAPIClient {
