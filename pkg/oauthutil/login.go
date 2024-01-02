@@ -26,6 +26,7 @@ type LoginOptions struct {
 	OAuth          *oauth2.Config
 	NoPKCE         bool
 	NoRefreshToken bool
+	NoState        bool
 }
 
 // NewLoginOptions returns LoginOptions with defaults set.
@@ -47,6 +48,9 @@ func Login(opts *LoginOptions) (code string, verifier *PKCEVerifier, err error) 
 
 	// setup handler for specified state
 	state := rand.Hex(common.StateLen)
+	if opts.NoState {
+		state = ""
+	}
 	handler, codeChan := newLoginHandler(state)
 
 	// start server

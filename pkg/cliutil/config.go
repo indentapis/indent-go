@@ -57,7 +57,6 @@ func NewConfig(logger *zap.Logger) *Config {
 	// populate config
 	config := new(Config)
 	config.configDir = filepath.Dir(configFile)
-	config.refresh(logger)
 	return config
 }
 

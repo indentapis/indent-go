@@ -36,11 +36,16 @@ func VariableStr(min, max int) string {
 
 // Intn returns a number in [0, max).
 func Intn(max int) int {
-	num, err := rand.Int(rand.Reader, big.NewInt(int64(max)))
+	return int(Int64n(int64(max)))
+}
+
+// Int64n returns a number in [0, max).
+func Int64n(max int64) int64 {
+	num, err := rand.Int(rand.Reader, big.NewInt(max))
 	if err != nil {
 		panic(err)
 	}
-	return int(num.Int64())
+	return num.Int64()
 }
 
 // Bool returns a bool

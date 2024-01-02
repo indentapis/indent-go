@@ -47,6 +47,9 @@ func (m *Resource) MarshalLogObject(oe zapcore.ObjectEncoder) error {
 	keyName = "Kind" // field kind = 4
 	oe.AddString(keyName, m.Kind)
 
+	keyName = "Email" // field email = 5
+	oe.AddString(keyName, m.Email)
+
 	keyName = "Labels" // field labels = 10
 	oe.AddObject(keyName, zapcore.ObjectMarshalerFunc(func(oe zapcore.ObjectEncoder) error {
 		for mk, mv := range m.Labels {
