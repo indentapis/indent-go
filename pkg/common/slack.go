@@ -53,3 +53,8 @@ const (
 	// SourceSlack is the Source when a Petition is received by Slack.
 	SourceSlack = "Slack"
 )
+
+const (
+	// ResourceIDSlackBot is the ID of the Slack bot.
+	ResourceIDSlackBot = "USLACKBOT"
+)
