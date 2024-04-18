@@ -1,6 +1,8 @@
 module go.indent.com/indent-go
 
-go 1.20
+go 1.21.3
+
+toolchain go1.22.2
 
 require (
 	github.com/golang/protobuf v1.5.3
